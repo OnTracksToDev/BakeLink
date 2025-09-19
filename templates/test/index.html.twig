@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test Assets{% endblock %}
+
+{% block body %}
+<h1 class="text-primary">Test Bootstrap</h1>
+
+<!-- Test Bootstrap Icons -->
+<p>
+  <i class="bi bi-alarm-fill"></i> Icône Bootstrap Icons
+</p>
+
+<!-- Test Turbolinks -->
+<a href="{{ path('test') }}" data-turbolinks-action="replace">Recharger cette page avec Turbolinks</a>
+{% endblock %}

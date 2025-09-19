@@ -1,0 +1,30 @@
+/* ===========================
+   🎨 Variables Globales & Thème
+   =========================== */
+
+// Variables custom (BakeLink)
+@import "base/variables";      // couleurs, typographie, tailles
+@import "themes/custom-theme"; // surcharge spécifique à BakeLink
+
+/* ===========================
+   ✍️ Base & Typographie
+   =========================== */
+@import "base/typography"; // Polices globales (Poppins, Roboto...)
+
+/* ===========================
+   ✍️ Bootswatch + Bootstrap
+   =========================== */
+
+// Bootswatch Morph variables
+@import "~bootswatch/dist/morph/variables";
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Bootswatch Morph style (après Bootstrap pour overrides)
+@import "~bootswatch/dist/morph/bootswatch";
+
+/* ===========================
+   ✨ Bootstrap Icons
+   =========================== */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
