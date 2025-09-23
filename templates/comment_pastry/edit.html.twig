@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit CommentPastry{% endblock %}
+
+{% block body %}
+    <h1>Edit CommentPastry</h1>
+
+    {{ include('comment_pastry/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_comment_pastry_index') }}">back to list</a>
+
+    {{ include('comment_pastry/_delete_form.html.twig') }}
+{% endblock %}

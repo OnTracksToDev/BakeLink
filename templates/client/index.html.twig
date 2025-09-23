@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client index{% endblock %}
+
+{% block body %}
+    <h1>Client index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Pseudo</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>CreatedAt</th>
+                <th>SocialLink</th>
+                <th>PhotoUrl</th>
+                <th>IsVerified</th>
+                <th>IsProfileCompleted</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for client in clients %}
+            <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.roles ? client.roles|json_encode : '' }}</td>
+                <td>{{ client.password }}</td>
+                <td>{{ client.firstname }}</td>
+                <td>{{ client.lastname }}</td>
+                <td>{{ client.pseudo }}</td>
+                <td>{{ client.phone }}</td>
+                <td>{{ client.city }}</td>
+                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ client.socialLink }}</td>
+                <td>{{ client.photoUrl }}</td>
+                <td>{{ client.isVerified ? 'Yes' : 'No' }}</td>
+                <td>{{ client.isProfileCompleted ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_client_show', {'id': client.id}) }}">show</a>
+                    <a href="{{ path('app_client_edit', {'id': client.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_client_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CommentPastry index{% endblock %}
+
+{% block body %}
+    <h1>CommentPastry index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>ContentComment</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for comment_pastry in comment_pastries %}
+            <tr>
+                <td>{{ comment_pastry.id }}</td>
+                <td>{{ comment_pastry.contentComment }}</td>
+                <td>{{ comment_pastry.createdAt ? comment_pastry.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ comment_pastry.updatedAt ? comment_pastry.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_comment_pastry_show', {'id': comment_pastry.id}) }}">show</a>
+                    <a href="{{ path('app_comment_pastry_edit', {'id': comment_pastry.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_comment_pastry_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RequestOrder{% endblock %}
+
+{% block body %}
+    <h1>RequestOrder</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ request_order.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ request_order.description }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ request_order.status }}</td>
+            </tr>
+            <tr>
+                <th>EventDate</th>
+                <td>{{ request_order.eventDate ? request_order.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ request_order.createdAt ? request_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ request_order.updatedAt ? request_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FinishedAt</th>
+                <td>{{ request_order.finishedAt ? request_order.finishedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_request_order_index') }}">back to list</a>
+
+    <a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}">edit</a>
+
+    {{ include('request_order/_delete_form.html.twig') }}
+{% endblock %}

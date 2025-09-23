@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pastry index{% endblock %}
+
+{% block body %}
+    <h1 class="text-primary">Pastry index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>PhotoUrl</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pastry in pastries %}
+            <tr>
+                <td>{{ pastry.id }}</td>
+                <td>{{ pastry.photoUrl }}</td>
+                <td>{{ pastry.title }}</td>
+                <td>{{ pastry.description }}</td>
+                <td>{{ pastry.createdAt ? pastry.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ pastry.updatedAt ? pastry.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_pastry_show', {'id': pastry.id}) }}">show</a>
+                    <a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pastry_new') }}">Create new</a>
+{% endblock %}

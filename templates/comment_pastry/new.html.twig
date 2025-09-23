@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CommentPastry{% endblock %}
+
+{% block body %}
+    <h1>Create new CommentPastry</h1>
+
+    {{ include('comment_pastry/_form.html.twig') }}
+
+    <a href="{{ path('app_comment_pastry_index') }}">back to list</a>
+{% endblock %}

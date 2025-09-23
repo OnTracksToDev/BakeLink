@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PastryChef index{% endblock %}
+
+{% block body %}
+    <h1>PastryChef index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Pseudo</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>CreatedAt</th>
+                <th>SocialLink</th>
+                <th>PhotoUrl</th>
+                <th>IsVerified</th>
+                <th>IsProfileCompleted</th>
+                <th>Experience</th>
+                <th>Price</th>
+                <th>Speciality</th>
+                <th>WebsiteLink</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pastry_chef in pastry_chefs %}
+            <tr>
+                <td>{{ pastry_chef.id }}</td>
+                <td>{{ pastry_chef.email }}</td>
+                <td>{{ pastry_chef.roles ? pastry_chef.roles|json_encode : '' }}</td>
+                <td>{{ pastry_chef.password }}</td>
+                <td>{{ pastry_chef.firstname }}</td>
+                <td>{{ pastry_chef.lastname }}</td>
+                <td>{{ pastry_chef.pseudo }}</td>
+                <td>{{ pastry_chef.phone }}</td>
+                <td>{{ pastry_chef.city }}</td>
+                <td>{{ pastry_chef.createdAt ? pastry_chef.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ pastry_chef.socialLink }}</td>
+                <td>{{ pastry_chef.photoUrl }}</td>
+                <td>{{ pastry_chef.isVerified ? 'Yes' : 'No' }}</td>
+                <td>{{ pastry_chef.isProfileCompleted ? 'Yes' : 'No' }}</td>
+                <td>{{ pastry_chef.experience }}</td>
+                <td>{{ pastry_chef.price }}</td>
+                <td>{{ pastry_chef.speciality }}</td>
+                <td>{{ pastry_chef.websiteLink }}</td>
+                <td>
+                    <a href="{{ path('app_pastry_chef_show', {'id': pastry_chef.id}) }}">show</a>
+                    <a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="19">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pastry_chef_new') }}">Create new</a>
+{% endblock %}

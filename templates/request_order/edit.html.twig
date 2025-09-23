@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit RequestOrder{% endblock %}
+
+{% block body %}
+    <h1>Edit RequestOrder</h1>
+
+    {{ include('request_order/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_request_order_index') }}">back to list</a>
+
+    {{ include('request_order/_delete_form.html.twig') }}
+{% endblock %}

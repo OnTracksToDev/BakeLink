@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RequestOrder index{% endblock %}
+
+{% block body %}
+    <h1>RequestOrder index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>EventDate</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>FinishedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for request_order in request_orders %}
+            <tr>
+                <td>{{ request_order.id }}</td>
+                <td>{{ request_order.description }}</td>
+                <td>{{ request_order.status }}</td>
+                <td>{{ request_order.eventDate ? request_order.eventDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ request_order.createdAt ? request_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ request_order.updatedAt ? request_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ request_order.finishedAt ? request_order.finishedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_request_order_show', {'id': request_order.id}) }}">show</a>
+                    <a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_request_order_new') }}">Create new</a>
+{% endblock %}

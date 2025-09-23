@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pastry{% endblock %}
+
+{% block body %}
+    <h1>Pastry</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pastry.id }}</td>
+            </tr>
+            <tr>
+                <th>PhotoUrl</th>
+                <td>{{ pastry.photoUrl }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ pastry.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ pastry.description }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ pastry.createdAt ? pastry.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ pastry.updatedAt ? pastry.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pastry_index') }}">back to list</a>
+
+    <a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}">edit</a>
+
+    {{ include('pastry/_delete_form.html.twig') }}
+{% endblock %}

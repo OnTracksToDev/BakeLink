@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Pastry{% endblock %}
+
+{% block body %}
+    <h1>Edit Pastry</h1>
+
+    {{ include('pastry/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_pastry_index') }}">back to list</a>
+
+    {{ include('pastry/_delete_form.html.twig') }}
+{% endblock %}

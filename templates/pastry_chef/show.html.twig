@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PastryChef{% endblock %}
+
+{% block body %}
+    <h1>PastryChef</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pastry_chef.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ pastry_chef.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ pastry_chef.roles ? pastry_chef.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ pastry_chef.password }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ pastry_chef.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ pastry_chef.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Pseudo</th>
+                <td>{{ pastry_chef.pseudo }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ pastry_chef.phone }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ pastry_chef.city }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ pastry_chef.createdAt ? pastry_chef.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>SocialLink</th>
+                <td>{{ pastry_chef.socialLink }}</td>
+            </tr>
+            <tr>
+                <th>PhotoUrl</th>
+                <td>{{ pastry_chef.photoUrl }}</td>
+            </tr>
+            <tr>
+                <th>IsVerified</th>
+                <td>{{ pastry_chef.isVerified ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsProfileCompleted</th>
+                <td>{{ pastry_chef.isProfileCompleted ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Experience</th>
+                <td>{{ pastry_chef.experience }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ pastry_chef.price }}</td>
+            </tr>
+            <tr>
+                <th>Speciality</th>
+                <td>{{ pastry_chef.speciality }}</td>
+            </tr>
+            <tr>
+                <th>WebsiteLink</th>
+                <td>{{ pastry_chef.websiteLink }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_pastry_chef_index') }}">back to list</a>
+
+    <a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}">edit</a>
+
+    {{ include('pastry_chef/_delete_form.html.twig') }}
+{% endblock %}
