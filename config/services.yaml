@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    aws_access_key_id: '%env(AWS_ACCESS_KEY_ID)%'
+    aws_secret_access_key: '%env(AWS_SECRET_ACCESS_KEY)%'
+    aws_s3_bucket: '%env(AWS_S3_BUCKET)%'
+    aws_region: '%env(AWS_REGION)%'
 
 services:
     # default configuration for services in *this* file
