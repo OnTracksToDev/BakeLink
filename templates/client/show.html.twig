@@ -1,74 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client{% endblock %}
+{% block title %}Profil
+{% endblock %}
 
 {% block body %}
-    <h1>Client</h1>
+	<div
+		class="container py-5">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ client.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ client.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ client.roles ? client.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ client.password }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ client.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ client.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ client.pseudo }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ client.phone }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ client.city }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ client.createdAt ? client.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>SocialLink</th>
-                <td>{{ client.socialLink }}</td>
-            </tr>
-            <tr>
-                <th>PhotoUrl</th>
-                <td>{{ client.photoUrl }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ client.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsProfileCompleted</th>
-                <td>{{ client.isProfileCompleted ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+		<!-- SECTION PROFIL -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body d-flex align-items-center justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="rounded-circle overflow-hidden" style="width:80px; height:80px;">
+						<img src="{{ client.photoUrl }}" alt="{{ client.firstname }} {{ client.lastname }}" class="w-100 h-100 object-fit-cover">
+					</div>
+					<div class="ms-3">
+						<h5 class="mb-0 fw-bold">{{ client.pseudo }}</h5>
+					</div>
+				</div>
+				<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="btn btn-outline-dark">
+					<span class="d-none d-md-inline fw-bold">
+						<i class="bi bi-pencil"></i>
+						Modifier Profil
+					</span>
+					<span class="d-inline d-md-none fw-bold">
+						<i class="bi bi-pencil"></i>
+					</span>
+				</a>
+			</div>
+		</div>
 
-    <a href="{{ path('app_client_index') }}">back to list</a>
+		<!-- SECTION DEMANDES ET CONTENU -->
+		<div
+			class="row">
+			<!-- Bloc Mes Demandes -->
+			<div class="col-md-6 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-3">Mes Demandes</p>
+						<a href="{{ path('app_view_client_requests', {'id': client.id}) }}" class="btn btn-outline-dark">
 
-    <a href="{{ path('app_client_edit', {'id': client.id}) }}">edit</a>
+							Voir mes demandes</a>
+					</div>
+				</div>
+			</div>
 
-    {{ include('client/_delete_form.html.twig') }}
+			<!-- Bloc Mon contenu -->
+			<div class="col-md-6 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-3">Mon contenu :</p>
+						<div class="d-grid gap-2">
+							<a href="{{path('app_client_comment_pastry', {'id': client.id})}}" class="btn btn-outline-dark">
+								Mes Commentaires Pâtisserie</a>
+
+							<a href="{{path('app_client_comment_chef', {'id': client.id})}}" class="btn btn-outline-dark">Mes Commentaires Pâtissiers
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
 {% endblock %}

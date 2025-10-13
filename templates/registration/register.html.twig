@@ -4,30 +4,115 @@
 {% endblock %}
 
 {% block body %}
-	{% for flash_error in app.flashes('verify_email_error') %}
-		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-	{% endfor %}
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div
+				class="col-md-8 col-lg-6">
+				<!-- Carte d'inscription -->
+				<div class="card shadow-sm border-0">
+					<div
+						class="card-body p-5">
+						<!-- En-tête -->
+						<div class="text-center mb-4">
+							<h1 class="h3 mb-3 fw-bold text-dark">Inscription</h1>
+							<p class="text-muted">Créez votre compte en quelques étapes</p>
+						</div>
 
-	<h1>Inscription</h1>
+						<!-- Messages d'alerte -->
+						{% for flash_error in app.flashes('verify_email_error') %}
+							<div class="alert alert-danger d-flex align-items-center" role="alert">
+								<i class="bi bi-exclamation-triangle-fill me-2"></i>
+								{{ flash_error }}
+							</div>
+						{% endfor %}
 
-	{{ form_errors(registrationForm) }}
+						{{ form_errors(registrationForm) }}
 
-	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.roles, {
-            label: 'Inscription en tant que :'
-        }) }}
-	{{ form_row(registrationForm.email) }}
-	{{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
-        }) }}
-	{{ form_row(registrationForm.agreeTerms, {
-            label: 'J’accepte les conditions d’utilisation'
-        }) }}
+						<!-- Formulaire -->
+						{{ form_start(registrationForm) }}
 
+						<!-- Rôle - Select avec placeholder -->
+						<div class="mb-4">
+							<label for="{{ registrationForm.roles.vars.id }}" class="form-label fw-semibold">Inscription en tant que :</label>
+							<div class="input-group">
+								<span class="input-group-text bg-light border-end-0">
+									<i class="bi bi-person-badge text-muted"></i>
+								</span>
+								{{ form_widget(registrationForm.roles, {
+										'attr': {
+											'class': 'form-select border-start-0'
+										}
+									}) }}
+							</div>
+							{{ form_errors(registrationForm.roles) }}
+						</div>
+						<!-- Email -->
+						<div class="mb-3">
+							<label for="{{ registrationForm.email.vars.id }}" class="form-label fw-semibold">Email</label>
+							<div class="input-group">
+								<span class="input-group-text bg-light border-end-0">
+									<i class="bi bi-envelope text-muted"></i>
+								</span>
+								{{ form_widget(registrationForm.email, {
+										'attr': {
+											'class': 'form-control border-start-0',
+											'placeholder': 'votre@email.com'
+										}
+									}) }}
+							</div>
+							{{ form_errors(registrationForm.email) }}
+						</div>
 
-	<button type="submit" class="btn">S'inscrire</button>
-	{{ form_end(registrationForm) }}
-	<p class="text-center">Déjà un compte ?
-		<a href="{{ path('app_login') }}">Connectez-vous ici</a>
-	</p>
+						<!-- Mot de passe -->
+						<div class="mb-3">
+							<label for="{{ registrationForm.plainPassword.vars.id }}" class="form-label fw-semibold">Mot de passe</label>
+							<div class="input-group">
+								<span class="input-group-text bg-light border-end-0">
+									<i class="bi bi-lock text-muted"></i>
+								</span>
+								{{ form_widget(registrationForm.plainPassword, {
+										'attr': {
+											'class': 'form-control border-start-0',
+											'placeholder': 'Votre mot de passe'
+										}
+									}) }}
+							</div>
+							{{ form_errors(registrationForm.plainPassword) }}
+						</div>
+
+						<!-- Conditions d'utilisation -->
+						<div class="mb-4">
+							<div class="form-check">
+								{{ form_widget(registrationForm.agreeTerms, {
+										'attr': {'class': 'form-check-input'}
+									}) }}
+								<label class="form-check-label text-muted" for="{{ registrationForm.agreeTerms.vars.id }}">
+									J'accepte les
+									<a href="#" class="text-decoration-none">conditions d'utilisation</a>
+								</label>
+							</div>
+							{{ form_errors(registrationForm.agreeTerms) }}
+						</div>
+
+						<!-- Bouton d'inscription -->
+						<div class="d-grid mb-3">
+							<button type="submit" class="btn btn-outline-dark fw-semibold">
+								S'inscrire
+							</button>
+						</div>
+
+						<!-- Lien vers la connexion -->
+						<div class="text-center">
+							<p class="text-muted mb-0">Déjà un compte ?
+								<a href="{{ path('app_login') }}" class="text-decoration-none fw-semibold text-dark">
+									Connectez-vous ici
+								</a>
+							</p>
+						</div>
+						{{ form_end(registrationForm) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

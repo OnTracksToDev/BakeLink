@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Commentaires sur les Pâtissiers
+{% endblock %}
+
+{% block body %}
+	<div
+		class="container py-5">
+
+		<!-- SECTION TITRE -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body text-center">
+				<h1 class="mb-0 fw-bold">Mes Commentaires sur les Pâtissiers</h1>
+			</div>
+		</div>
+
+		<!-- SECTION COMMENTAIRES -->
+		<section class="row">
+			<div class="col-12">
+				{% if comments is empty %}
+					<div class="card bg-light">
+						<div class="card-body text-center">
+							<p class="mb-0">Aucun commentaire trouvé.</p>
+						</div>
+					</div>
+				{% else %}
+					<!-- Compteur de commentaires -->
+					<div class="card mb-4 bg-light">
+						<div class="card-body text-center">
+							<h4 class="mb-0">Vous avez rédigé
+								{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}</h4>
+						</div>
+					</div>
+
+					<!-- Liste des commentaires -->
+					<div class="row">
+						{% for comment in comments %}
+							<div class="col-md-6 col-lg-4 mb-3">
+								<div class="card bg-light h-100">
+									<div class="card-body">
+										<h6 class="fw-bold mb-2">Contenu :</h6>
+										<p class="card-text">{{ comment.contentComment }}</p>
+										<p class="card-text small text-muted mb-3">Date :
+											{{ comment.createdAt|date('d/m/Y H:i') }}</p>
+										<div class="d-flex justify-content-center">
+											<a href="{{ path('app_comment_pastry_chef_edit', {'id': comment.id}) }}" class="btn btn-outline-dark btn-sm">
+												<span class="d-none d-md-inline">
+													<i class="bi bi-pencil"></i>
+													Modifier
+												</span>
+												<span class="d-inline d-md-none">
+													<i class="bi bi-pencil"></i>
+												</span>
+											</a>
+											<form action="{{ path('app_comment_pastry_chef_delete', {'id': comment.id}) }}" method="POST" class="d-inline ms-2">
+												<input type="hidden" name="_method" value="DELETE">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+												<button type="submit" class="btn btn-outline-dark btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+													<span class="d-none d-md-inline">
+														<i class="bi bi-trash3"></i>
+														Supprimer
+													</span>
+													<span class="d-inline d-md-none">
+														<i class="bi bi-trash3"></i>
+													</span>
+												</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</section>
+
+		<!-- BOUTON RETOUR -->
+		<div class="row mt-4">
+			<div class="col text-center">
+				<a href="{{ path('app_client_show', {'id': client.id}) }}" class="btn btn-outline-dark">
+					Retour au Profil de
+					{{ client.pseudo }}
+				</a>
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

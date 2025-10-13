@@ -1,90 +1,255 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PastryChef{% endblock %}
+{% block title %}
+	{{ pastry_chef.pseudo }}
+{% endblock %}
 
 {% block body %}
-    <h1>PastryChef</h1>
+	<div
+		class="container py-5">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ pastry_chef.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ pastry_chef.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ pastry_chef.roles ? pastry_chef.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ pastry_chef.password }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ pastry_chef.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Lastname</th>
-                <td>{{ pastry_chef.lastname }}</td>
-            </tr>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ pastry_chef.pseudo }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ pastry_chef.phone }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ pastry_chef.city }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ pastry_chef.createdAt ? pastry_chef.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>SocialLink</th>
-                <td>{{ pastry_chef.socialLink }}</td>
-            </tr>
-            <tr>
-                <th>PhotoUrl</th>
-                <td>{{ pastry_chef.photoUrl }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ pastry_chef.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsProfileCompleted</th>
-                <td>{{ pastry_chef.isProfileCompleted ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Experience</th>
-                <td>{{ pastry_chef.experience }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ pastry_chef.price }}</td>
-            </tr>
-            <tr>
-                <th>Speciality</th>
-                <td>{{ pastry_chef.speciality }}</td>
-            </tr>
-            <tr>
-                <th>WebsiteLink</th>
-                <td>{{ pastry_chef.websiteLink }}</td>
-            </tr>
-        </tbody>
-    </table>
+		<!-- SECTION PROFIL -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body d-flex align-items-center justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="rounded-circle overflow-hidden" style="width:80px; height:80px;">
+						<img src="{{ pastry_chef.photoUrl }}" alt="{{ pastry_chef.firstname }} {{ pastry_chef.lastname }}" class="w-100 h-100 object-fit-cover">
+					</div>
+					<div class="ms-3">
+						<h5 class="mb-0 fw-bold">{{ pastry_chef.pseudo }}</h5>
+						<p class="mb-0 text-muted">{{ pastry_chef.speciality }}</p>
+					</div>
+				</div>
+				<a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark">
+					<span class="d-none d-md-inline fw-bold">
+						<i class="bi bi-pencil"></i>
+						Modifier Profil
+					</span>
+					<span class="d-inline d-md-none fw-bold">
+						<i class="bi bi-pencil"></i>
+					</span>
+				</a>
+			</div>
+		</div>
 
-    <a href="{{ path('app_pastry_chef_index') }}">back to list</a>
+		<!-- SECTION TABLEAU DE BORD -->
+		<div
+			class="row mb-4">
+			<!-- Mes Commandes -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-3">Mes Commandes</p>
+						<div class="d-grid gap-2">
+							<a href="{{ path('app_view_pastry_chef_requests', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark btn-sm">
+								Voir mes commandes
+							</a>
+							<small class="text-muted">{{ pastry_chef.requestOrders|length }}
+								commande(s)</small>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}">edit</a>
+			<!-- Mes Pâtisseries -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-3">Mes Pâtisseries</p>
+						<div class="d-grid gap-2">
+							<a href="{{ path('app_pastry_new') }}" class="btn btn-outline-dark btn-sm">
+								<i class="bi bi-plus-circle me-1"></i>Créer
+							</a>
+							<small class="text-muted">{{ pastry_chef.pastries|length }}
+								création(s)</small>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    {{ include('pastry_chef/_delete_form.html.twig') }}
+			<!-- Commentaires Dropdown -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-3">Mes Commentaires</p>
+						<div class="d-grid gap-2">
+							<a href="{{path('app_pastry_chef_pastry_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
+								<i class="bi bi-cake me-1"></i>Sur mes créations
+							</a>
+							<a href="{{path('app_pastry_chef_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
+								<i class="bi bi-person me-1"></i>Sur mon profil
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECTION INFORMATIONS PROFESSIONNELLES -->
+		<div
+			class="row mb-4">
+			<!-- Expérience -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-2">Expérience</p>
+						<h6 class="text-primary">{{ pastry_chef.experience }}
+							ans</h6>
+					</div>
+				</div>
+			</div>
+
+			<!-- Tarif -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-2">Tarif horaire</p>
+						<h6 class="text-primary">{{ pastry_chef.price }}
+							€/h</h6>
+					</div>
+				</div>
+			</div>
+
+			<!-- Statut vérification -->
+			<div class="col-md-4 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body text-center">
+						<p class="fw-bold mb-2">Profil</p>
+						{% if pastry_chef.isVerified %}
+							<span class="badge bg-success">Vérifié</span>
+						{% else %}
+							<span class="badge bg-warning">En attente</span>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECTION COORDONNÉES ET LIENS -->
+		<div
+			class="row">
+			<!-- Coordonnées -->
+			<div class="col-md-6 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body">
+						<p class="fw-bold mb-3">Coordonnées</p>
+						<div class="mb-2">
+							<i class="bi bi-envelope me-2"></i>
+							{{ pastry_chef.email }}
+						</div>
+						{% if pastry_chef.phone %}
+							<div class="mb-2">
+								<i class="bi bi-telephone me-2"></i>
+								{{ pastry_chef.phone }}
+							</div>
+						{% endif %}
+						{% if pastry_chef.city %}
+							<div class="mb-2">
+								<i class="bi bi-geo-alt me-2"></i>
+								{{ pastry_chef.city }}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<!-- Liens et réseaux -->
+			<div class="col-md-6 mb-3">
+				<div class="card bg-light h-100">
+					<div class="card-body">
+						<p class="fw-bold mb-3">Liens</p>
+						{% if pastry_chef.websiteLink %}
+							<div class="mb-2">
+								<i class="bi bi-globe me-2"></i>
+								<a href="{{ pastry_chef.websiteLink }}" target="_blank" class="text-decoration-none">Site web</a>
+							</div>
+						{% endif %}
+						{% if pastry_chef.socialLink %}
+							<div class="mb-2">
+								<i class="bi bi-link-45deg me-2"></i>
+								<a href="{{ pastry_chef.socialLink }}" target="_blank" class="text-decoration-none">Réseau social</a>
+							</div>
+						{% endif %}
+						<div class="mt-3">
+							<small class="text-muted">
+								Membre depuis
+								{{ pastry_chef.createdAt|date('d/m/Y') }}
+							</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Galerie Mes Pâtisseries -->
+		<div class="row">
+			<div class="col-12">
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h2 class="fw-bold text-dark">Mes Réalisations</h2>
+				</div>
+
+				{% if pastry_chef.pastries is not empty %}
+					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+						{% for pastry in pastry_chef.pastries %}
+							<div class="col">
+								<div class="card border-0 shadow-sm h-100">
+									<div class="position-relative overflow-hidden">
+										<img src="{{ pastry.photoUrl }}" class="card-img-top" alt="{{ pastry.title }}" style="height: 200px; object-fit: cover;">
+										<div class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-50 text-white p-2">
+											<h6 class="card-title mb-0 fw-bold">{{ pastry.title }}</h6>
+										</div>
+									</div>
+
+									<div class="card-body">
+										<p class="card-text small text-muted mb-2">
+											{{ pastry.description|length > 100 ? pastry.description|slice(0, 100) ~ '...' : pastry.description }}
+										</p>
+										<div class="d-flex justify-content-between align-items-center">
+											<small class="text-muted">
+												<i class="bi bi-calendar me-1"></i>
+												{{ pastry.createdAt|date('d/m/Y') }}
+											</small>
+											<div class="btn-group btn-group-sm">
+												<a href="{{ path('app_pastry_show', {'id': pastry.id}) }}" class="btn btn-outline-dark" title="Voir détails">
+													<i class="bi bi-eye"></i>
+												</a>
+												<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn btn-outline-secondary" title="Modifier">
+													<i class="bi bi-pencil"></i>
+												</a>
+												<a href="{{ path('app_pastry_delete', {'id': pastry.id}) }}" class="btn btn-outline-primary" title="Modifier">
+													<i class="bi bi-trash"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% else %}
+					<div class="text-center py-5 bg-light rounded">
+						<i class="bi bi-cake display-1 text-muted"></i>
+						<h5 class="text-muted mt-3">Aucune pâtisserie pour le moment</h5>
+						<p class="text-muted">Commencez par ajouter vos premières réalisations</p>
+						<a href="{{ path('app_pastry_new') }}" class="btn btn-dark mt-2">
+							<i class="bi bi-plus-circle me-1"></i>Créer ma première pâtisserie
+						</a>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<!-- BOUTONS ACTION -->
+		<div class="row mt-4">
+			<div class="col-12 d-flex justify-content-between">
+				<a href="{{ path('app_pastry_chef_index') }}" class="btn btn-outline-dark">
+					<i class="bi bi-arrow-left me-2"></i>Retour à la liste
+				</a>
+				<div>
+					{{ include('pastry_chef/_delete_form.html.twig') }}
+				</div>
+			</div>
+		</div>
+
+	</div>
 {% endblock %}

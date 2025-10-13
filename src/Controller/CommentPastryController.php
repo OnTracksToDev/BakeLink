@@ -4,17 +4,19 @@ namespace App\Controller;
 
 use App\Entity\CommentPastry;
 use App\Form\CommentPastryType;
-use App\Repository\CommentPastryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Security\Voter\CommentPastryVoter;
+use App\Repository\CommentPastryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/comment/pastry')]
-final class CommentPastryController extends AbstractController
+class CommentPastryController extends AbstractController
 {
-    #[Route(name: 'app_comment_pastry_index', methods: ['GET'])]
+    #[Route('/', name: 'app_comment_pastry_index', methods: ['GET'])]
     public function index(CommentPastryRepository $commentPastryRepository): Response
     {
         return $this->render('comment_pastry/index.html.twig', [
@@ -59,22 +61,35 @@ final class CommentPastryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_comment_pastry_index', [], Response::HTTP_SEE_OTHER);
+            $pastryId = $commentPastry->getPastry()->getId();
+
+            //redirection
+            return $this->redirectToRoute('app_pastry_show', ['id' => $pastryId]);
         }
+
+        //objet Pastry associé au commentaire
+        $pastry = $commentPastry->getPastry();
 
         return $this->render('comment_pastry/edit.html.twig', [
             'comment_pastry' => $commentPastry,
             'form' => $form,
+            'pastry' => $pastry
         ]);
     }
 
     #[Route('/{id}', name: 'app_comment_pastry_delete', methods: ['POST'])]
     public function delete(Request $request, CommentPastry $commentPastry, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$commentPastry->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $commentPastry->getId(), $request->request->get('_token'))) {
             $entityManager->remove($commentPastry);
             $entityManager->flush();
+            //id client
+            $clientId = $commentPastry->getClient()->getId();
+
+            //redirection
+            return $this->redirectToRoute('app_client_show', ['id' => $clientId]);
         }
+
 
         return $this->redirectToRoute('app_comment_pastry_index', [], Response::HTTP_SEE_OTHER);
     }

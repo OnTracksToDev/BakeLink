@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Commentaires de:
+	{{ pastry_chef.pseudo }}
+{% endblock %}
+
+{% block body %}
+	<div
+		class="container py-5">
+
+		<!-- SECTION TITRE -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body text-center">
+				<h1 class="mb-0 fw-bold">Liste des Commentaires de
+					{{ pastry_chef.pseudo }}</h1>
+			</div>
+		</div>
+
+		<!-- SECTION COMMENTAIRES -->
+		<section class="row">
+			<div class="col-12">
+				{% if comments is empty %}
+					<div class="card bg-light">
+						<div class="card-body text-center">
+							<p class="mb-0">Aucun commentaire trouvé pour ce Pâtissier.</p>
+						</div>
+					</div>
+				{% else %}
+					<!-- Compteur de commentaires -->
+					<div class="card mb-4 bg-light">
+						<div class="card-body text-center">
+							<h4 class="mb-0">{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}
+								trouvé(s)</h4>
+						</div>
+					</div>
+
+					<!-- Liste des commentaires -->
+					<div class="row">
+						{% for comment in comments %}
+							<div class="col-md-6 col-lg-4 mb-3">
+								<div class="card bg-light h-100">
+									<div class="card-body">
+										<h6 class="fw-bold mb-2">De :
+											{{ comment.client.pseudo }}</h6>
+										{% set words = comment.contentComment|split(' ') %}
+										{% set shortContent = words|slice(0, 5)|join(' ') %}
+										<p class="card-text">{{ shortContent }}
+											{% if words|length > 5 %}...
+											{% endif %}
+										</p>
+										<p class="card-text small text-muted mb-3">Date :
+											{{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}</p>
+										<div class="d-flex justify-content-center">
+											<a href="{{ path('app_comment_pastry_chef_show', {'id': comment.id}) }}" class="btn btn-outline-dark btn-sm">
+												<span class="d-none d-md-inline">
+													<i class="bi bi-eye"></i>
+													Voir le commentaire complet
+												</span>
+												<span class="d-inline d-md-none">
+													<i class="bi bi-eye"></i>
+												</span>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</section>
+
+		<!-- BOUTON RETOUR -->
+		<div class="row mt-4">
+			<div class="col text-center">
+				<a href="{{ path('app_pastry_chef_show', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark">
+					Retour au Profil de
+					{{ pastry_chef.pseudo }}
+				</a>
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

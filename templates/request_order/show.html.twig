@@ -1,46 +1,224 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}RequestOrder{% endblock %}
+{% block title %}Détails de la commande
+{% endblock %}
 
 {% block body %}
-    <h1>RequestOrder</h1>
+	<div class="container-fluid py-4">
+		<div
+			class="row">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ request_order.id }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ request_order.description }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ request_order.status }}</td>
-            </tr>
-            <tr>
-                <th>EventDate</th>
-                <td>{{ request_order.eventDate ? request_order.eventDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ request_order.createdAt ? request_order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ request_order.updatedAt ? request_order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>FinishedAt</th>
-                <td>{{ request_order.finishedAt ? request_order.finishedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+			<!-- COLONNE GAUCHE -->
+			<div
+				class="col-lg-3">
+				<!-- En-tête commande -->
+				<div class="card bg-light mb-4">
+					<div class="card-body">
+						<h5 class="card-title">Commande #{{ request_order.id }}</h5>
 
-    <a href="{{ path('app_request_order_index') }}">back to list</a>
+						<!-- Statut -->
+						<div class="mb-4">
+							<span class="badge
+																		        {% if request_order.status == 'En cours' %}bg-info text-dark fs-6
+																		        {% elseif request_order.status == 'En attente' %}bg-warning text-dark fs-6
+																		        {% elseif request_order.status == 'Terminé' %}bg-success text-white fs-6
+																		        {% elseif request_order.status == 'Annulé' %}bg-danger text-white fs-6
+																		        {% else %}bg-secondary text-white fs-6{% endif %}
+																		        w-100 py-3 rounded-3 shadow">
+								<strong>{{ request_order.status }}</strong>
+							</span>
+						</div>
+						<!-- Infos -->
+						<div class="card border-0 shadow-sm mb-4">
+							<div class="card-body p-0">
+								<div class="list-group list-group-flush bg-light ">
+									<div class="list-group-item d-flex justify-content-between align-items-center px-3 py-3">
+										<span class="d-flex align-items-center">
+											<i class="bi bi-calendar-plus text-muted me-2"></i>
+											Créée le:
+										</span>
+										<strong class="badge bg-light text-dark fs-6 px-3 py-2 rounded">
+											{{ request_order.createdAt|date('d/m/Y H:i') }}
+										</strong>
+									</div>
+									<div class="list-group-item d-flex justify-content-between align-items-center px-3 py-3">
+										<span class="d-flex align-items-center">
+											<i class="bi bi-person-badge text-muted me-2"></i>
+											Chef:
+										</span>
+										<div>
+											<a href="{{ path('app_pastry_chef_show', {'id': request_order.pastryChef.id}) }}" class="badge bg-primary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+												{{ request_order.pastryChef.pseudo }}
+												<i class="bi bi-arrow-up-right ms-1 small"></i>
+											</a>
+										</div>
+									</div>
+									<div class="list-group-item d-flex justify-content-between align-items-center px-3 py-3">
+										<span class="d-flex align-items-center">
+											<i class="bi bi-person text-muted me-2"></i>
+											Client:
+										</span>
+										<div>
+											<a href="{{ path('app_client_show', {'id': request_order.client.id}) }}" class="badge bg-secondary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+												{{ request_order.client.pseudo }}
+												<i class="bi bi-arrow-up-right ms-1 small"></i>
+											</a>
+										</div>
+									</div>
+									{% if request_order.eventDate %}
+										<div class="list-group-item d-flex justify-content-between align-items-center px-3 py-3">
+											<span class="d-flex align-items-center">
+												<i class="bi bi-calendar-event text-muted me-2"></i>
+												Événement:
+											</span>
+											<strong class="badge bg-info text-dark fs-6 px-3 py-2 rounded">
+												{{ request_order.eventDate|date('d/m/Y') }}
+											</strong>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-    <a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}">edit</a>
+				<!-- Description -->
+				<div class="card mb-4 bg-light">
+					<div class="card-header">
+						<h6 class="mb-0">Description</h6>
+					</div>
+					<div class="card-body">
+						<p class="card-text small">{{ request_order.description }}</p>
+					</div>
+				</div>
 
-    {{ include('request_order/_delete_form.html.twig') }}
+				<!-- Actions -->
+				<div class="card bg-light">
+					<div class="card-body">
+						<div class="d-grid gap-2">
+							{% if is_granted('ROLE_CHEF') %}
+								<!-- Actions pour le CHEF -->
+								<a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}" class="btn btn-outline-primary btn-sm">
+									<i class="bi bi-pencil me-1"></i>Modifier la commande
+								</a>
+								<a href="{{ path('app_view_pastry_chef_requests', {'id': request_order.pastryChef.id}) }}" class="btn btn-outline-dark">
+									<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
+								</a>
+							{% elseif is_granted('ROLE_CLIENT') %}
+								<!-- Actions pour le CLIENT -->
+								<a href="{{ path('app_view_client_requests', {'id': request_order.client.id}) }}" class="btn btn-outline-dark">
+									<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
+								</a>
+							{% else %}
+								<!-- Fallback ADMIN -->
+								<button onclick="history.back()" class="btn btn-outline-dark">
+									<i class="bi bi-arrow-left me-1"></i>Retour
+								</button>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- COLONNE DROITE - Messagerie -->
+			<div class="col-lg-9">
+				<div class="card bg-light h-100">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Messagerie</h5>
+						<span class="badge bg-primary">{{ messages|length }}
+							messages</span>
+					</div>
+
+					<div
+						class="card-body d-flex flex-column">
+						<!-- Zone des messages -->
+						<div class="flex-grow-1 mb-4" style="max-height: 500px; overflow-y: auto;">
+							{% if messages is empty %}
+								<div class="text-center text-muted py-5">
+									<i class="bi bi-chat-dots display-4 d-block mb-2"></i>
+									<p>Aucun message pour le moment</p>
+									<p class="small">Soyez le premier à envoyer un message !</p>
+								</div>
+							{% else %}
+								<div class="messages-container">
+									{% for message in messages %}
+										<div class="message-item mb-3 {% if message.sender == app.user.id %}message-sent{% else %}message-received{% endif %}">
+											<div class="message-bubble {% if message.sender == app.user.id %}bg-primary text-white{% else %}bg-light{% endif %} p-3 rounded-3">
+												<div class="message-content">
+													{{ message.contentMessage }}
+												</div>
+												<div class="message-meta small mt-2 {% if message.sender == app.user.id %}text-white-50{% else %}text-muted{% endif %}">
+													{{ message.sender == request_order.client.id ? request_order.client.pseudo : request_order.pastryChef.pseudo }}
+													•
+													{{ message.createdAt|date('d/m/Y H:i') }}
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+							{% endif %}
+						</div>
+
+						<!-- Formulaire d'envoi -->
+						<div class="message-form">
+							{{ form_start(form) }}
+							<div class="input-group">
+								{{ form_widget(form.contentMessage, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Tapez votre message...',
+                                        'rows': 1
+                                    }
+                                }) }}
+								{{ form_widget(form.sender, {'attr': {'hidden': true}}) }}
+								{{ form_widget(form.requestOrder, {'attr': {'hidden': true}}) }}
+								{{ form_row(form._token) }}
+								<button type="submit" class="btn btn-primary">
+									<i class="bi bi-send"></i>
+								</button>
+							</div>
+							{{ form_end(form, {render_rest: false}) }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<style>
+		.messages-container {
+			padding: 1rem;
+		}
+
+		.message-item {
+			display: flex;
+		}
+
+		.message-sent {
+			justify-content: flex-end;
+		}
+
+		.message-received {
+			justify-content: flex-start;
+		}
+
+		.message-bubble {
+			max-width: 70%;
+			word-wrap: break-word;
+		}
+
+		.message-sent .message-bubble {
+			border-bottom-right-radius: 0.25rem !important;
+		}
+
+		.message-received .message-bubble {
+			border-bottom-left-radius: 0.25rem !important;
+		}
+
+		.message-form {
+			border-top: 1px solid #dee2e6;
+			padding-top: 1rem;
+		}
+	</style>
 {% endblock %}
