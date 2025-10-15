@@ -50,14 +50,15 @@
 										</p>
 										<p class="card-text small text-muted mb-3">Date :
 											{{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}</p>
-										<div class="d-flex justify-content-center">
+										<div class="d-flex flex-column flex-md-row justify-content-center mt-auto">
 											<a href="{{ path('app_comment_pastry_chef_show', {'id': comment.id}) }}" class="btn btn-outline-dark btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-eye"></i>
 													Voir le commentaire complet
 												</span>
 												<span class="d-inline d-md-none">
-													<i class="bi bi-eye"></i>
+													<i class="bi bi-eye">
+														Commentaire</i>
 												</span>
 											</a>
 										</div>

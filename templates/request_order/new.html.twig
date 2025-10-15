@@ -1,11 +1,139 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New RequestOrder{% endblock %}
+{% block title %}Nouvelle Demande de Service
+{% endblock %}
 
 {% block body %}
-    <h1>Create new RequestOrder</h1>
+	<div
+		class="container py-5">
+		<!-- SECTION TITRE -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body text-center">
+				<h1 class="mb-0 fw-bold">
+					<i class="bi bi-cake me-2"></i>Nouvelle Demande de Service
+				</h1>
+				<p class="text-muted mb-0 mt-2">Créez votre demande personnalisée</p>
+			</div>
+		</div>
 
-    {{ include('request_order/_form.html.twig') }}
+		<!-- SECTION PRINCIPALE -->
+		<div
+			class="row justify-content-center">
+			<!-- Formulaire -->
+			<div class="col-lg-8 mb-4">
+				<div class="card border-0 shadow-sm bg-light">
+					<div class="card-body p-4">
+						{{ form_errors(form) }}
+						{{ form_start(form) }}
 
-    <a href="{{ path('app_request_order_index') }}">back to list</a>
+						<!-- Description -->
+						<div class="mb-4">
+							<h4 class="fw-bold text-dark mb-3 border-bottom pb-2">
+								<i class="bi bi-chat-text me-2"></i>Description de votre projet
+							</h4>
+
+							<div class="mb-3">
+								{{ form_label(form.description, 'Décrivez votre demande', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+								<div class="input-group">
+									<span class="input-group-text bg-light align-items-start pt-3">
+										<i class="bi bi-text-paragraph text-muted"></i>
+									</span>
+									{{ form_widget(form.description, {
+										'attr': {
+											'class': 'form-control',
+											'rows': 5,
+											'placeholder': 'Décrivez en détail le gâteau que vous souhaitez : type, saveurs, décorations, nombre de personnes, allergies éventuelles...'
+										}
+									}) }}
+								</div>
+								{{ form_errors(form.description) }}
+							</div>
+						</div>
+
+						<!-- Date de l'événement -->
+						<div class="mb-4">
+							<h4 class="fw-bold text-dark mb-3 border-bottom pb-2">
+								<i class="bi bi-calendar-date me-2"></i>Date de l'événement
+							</h4>
+
+							<div class="mb-3">
+								{{ form_label(form.eventDate, 'Date souhaitée', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+								<div class="input-group">
+									<span class="input-group-text bg-light">
+										<i class="bi bi-calendar-check text-muted"></i>
+									</span>
+									{{ form_widget(form.eventDate, {
+										'attr': {
+											'class': 'form-control ',
+											'placeholder': 'Sélectionnez la date'
+										}
+									}) }}
+								</div>
+								{{ form_errors(form.eventDate) }}
+								<small class="text-muted">Prévoyez un délai suffisant pour la préparation</small>
+							</div>
+						</div>
+
+						<!-- Champs cachés -->
+						{{ form_widget(form.status, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.createdAt, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.updatedAt, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.finishedAt, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.client, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.pastryChef, {'attr': {'hidden': true}}) }}
+
+						<!-- BOUTON VALIDATION -->
+						<div class="d-grid mt-4">
+							<button class="btn btn-dark btn-lg fw-semibold" type="submit">
+								<i class="bi bi-send-check me-2"></i>Envoyer la demande
+							</button>
+						</div>
+
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+
+			<!-- Informations complémentaires -->
+			<div class="col-lg-4 mb-4">
+				<div class="card border-0 shadow-sm bg-light h-100">
+					<div class="card-body p-4 text-center">
+						<div class="mb-4">
+							<i class="bi bi-gift display-4 text-primary"></i>
+						</div>
+
+						<h5 class="fw-bold text-dark mb-3">Votre gâteau personnalisé</h5>
+
+						<div class="text-start">
+							<div class="d-flex align-items-start mb-3">
+								<i class="bi bi-chat-dots text-primary me-2 mt-1"></i>
+								<small>Discutez des détails avec le pâtissier</small>
+							</div>
+
+							<div class="d-flex align-items-start mb-3">
+								<i class="bi bi-palette text-primary me-2 mt-1"></i>
+								<small>Personnalisez selon vos préférences</small>
+							</div>
+
+							<div class="d-flex align-items-start mb-3">
+								<i class="bi bi-star text-primary me-2 mt-1"></i>
+								<small>Transformez votre vision en réalité</small>
+							</div>
+
+							<div class="d-flex align-items-start">
+								<i class="bi bi-clock text-primary me-2 mt-1"></i>
+								<small>Réponse sous 24-48 heures</small>
+							</div>
+						</div>
+
+						<div class="mt-4 pt-3 border-top">
+							<small class="text-muted">
+								Une fois votre demande envoyée, vous pourrez échanger directement avec le pâtissier pour affiner les détails.
+							</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -19,12 +19,12 @@
 						<!-- Statut -->
 						<div class="mb-4">
 							<span class="badge
-																		        {% if request_order.status == 'En cours' %}bg-info text-dark fs-6
-																		        {% elseif request_order.status == 'En attente' %}bg-warning text-dark fs-6
-																		        {% elseif request_order.status == 'Terminé' %}bg-success text-white fs-6
-																		        {% elseif request_order.status == 'Annulé' %}bg-danger text-white fs-6
-																		        {% else %}bg-secondary text-white fs-6{% endif %}
-																		        w-100 py-3 rounded-3 shadow">
+																											        {% if request_order.status == 'En cours' %}bg-info text-dark fs-6
+																											        {% elseif request_order.status == 'En attente' %}bg-warning text-dark fs-6
+																											        {% elseif request_order.status == 'Terminé' %}bg-success text-white fs-6
+																											        {% elseif request_order.status == 'Annulé' %}bg-danger text-white fs-6
+																											        {% else %}bg-secondary text-white fs-6{% endif %}
+																											        w-100 py-3 rounded-3 shadow">
 								<strong>{{ request_order.status }}</strong>
 							</span>
 						</div>
@@ -98,9 +98,11 @@
 						<div class="d-grid gap-2">
 							{% if is_granted('ROLE_CHEF') %}
 								<!-- Actions pour le CHEF -->
-								<a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}" class="btn btn-outline-primary btn-sm">
-									<i class="bi bi-pencil me-1"></i>Modifier la commande
-								</a>
+								{% if is_granted('REQUEST_ORDER_EDIT',request_order) %}
+									<a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}" class="btn btn-outline-primary btn-sm">
+										<i class="bi bi-pencil me-1"></i>Modifier la commande
+									</a>
+								{% endif %}
 								<a href="{{ path('app_view_pastry_chef_requests', {'id': request_order.pastryChef.id}) }}" class="btn btn-outline-dark">
 									<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
 								</a>

@@ -45,6 +45,7 @@ class CommentPastryController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_comment_pastry_show', methods: ['GET'])]
+    // #[IsGranted(CommentPastryVoter::EDIT, subject: 'commentPastry')]
     public function show(CommentPastry $commentPastry): Response
     {
         return $this->render('comment_pastry/show.html.twig', [

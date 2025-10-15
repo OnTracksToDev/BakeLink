@@ -20,166 +20,187 @@
 						<p class="mb-0 text-muted">{{ pastry_chef.speciality }}</p>
 					</div>
 				</div>
-				<a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark">
-					<span class="d-none d-md-inline fw-bold">
-						<i class="bi bi-pencil"></i>
-						Modifier Profil
-					</span>
-					<span class="d-inline d-md-none fw-bold">
-						<i class="bi bi-pencil"></i>
-					</span>
-				</a>
+				<div class="d-flex align-items-center gap-2">
+					{% if is_granted('PASTRYCHEF_EDIT', pastry_chef) %}
+						<a href="{{ path('app_pastry_chef_edit', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark">
+							<span class="d-none d-md-inline fw-bold">
+								<i class="bi bi-pencil"></i>
+								Modifier Profil
+							</span>
+							<span class="d-inline d-md-none fw-bold">
+								<i class="bi bi-pencil"></i>
+							</span>
+						</a>
+						{{ include('pastry_chef/_delete_form.html.twig') }}
+
+					{% endif %}
+					{% if is_granted('ROLE_CLIENT') %}
+						<a href="{{ path('app_request_order_new_pastrychef', {'pastryChefId': pastry_chef.id}) }}" class="btn btn-outline-dark">
+							<span class="d-none d-md-inline fw-bold">
+								<i class="bi bi-send"></i>
+								Demander Service
+							</span>
+							<span class="d-inline d-md-none fw-bold">
+								<i class="bi bi-send"></i>
+							</span>
+						</a>
+					{% endif %}
+				</div>
 			</div>
 		</div>
 
 		<!-- SECTION TABLEAU DE BORD -->
-		<div
-			class="row mb-4">
-			<!-- Mes Commandes -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-3">Mes Commandes</p>
-						<div class="d-grid gap-2">
-							<a href="{{ path('app_view_pastry_chef_requests', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark btn-sm">
-								Voir mes commandes
-							</a>
-							<small class="text-muted">{{ pastry_chef.requestOrders|length }}
-								commande(s)</small>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Mes Pâtisseries -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-3">Mes Pâtisseries</p>
-						<div class="d-grid gap-2">
-							<a href="{{ path('app_pastry_new') }}" class="btn btn-outline-dark btn-sm">
-								<i class="bi bi-plus-circle me-1"></i>Créer
-							</a>
-							<small class="text-muted">{{ pastry_chef.pastries|length }}
-								création(s)</small>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Commentaires Dropdown -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-3">Mes Commentaires</p>
-						<div class="d-grid gap-2">
-							<a href="{{path('app_pastry_chef_pastry_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
-								<i class="bi bi-cake me-1"></i>Sur mes créations
-							</a>
-							<a href="{{path('app_pastry_chef_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
-								<i class="bi bi-person me-1"></i>Sur mon profil
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- SECTION INFORMATIONS PROFESSIONNELLES -->
-		<div
-			class="row mb-4">
-			<!-- Expérience -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-2">Expérience</p>
-						<h6 class="text-primary">{{ pastry_chef.experience }}
-							ans</h6>
-					</div>
-				</div>
-			</div>
-
-			<!-- Tarif -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-2">Tarif horaire</p>
-						<h6 class="text-primary">{{ pastry_chef.price }}
-							€/h</h6>
-					</div>
-				</div>
-			</div>
-
-			<!-- Statut vérification -->
-			<div class="col-md-4 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-2">Profil</p>
-						{% if pastry_chef.isVerified %}
-							<span class="badge bg-success">Vérifié</span>
-						{% else %}
-							<span class="badge bg-warning">En attente</span>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- SECTION COORDONNÉES ET LIENS -->
-		<div
-			class="row">
-			<!-- Coordonnées -->
-			<div class="col-md-6 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body">
-						<p class="fw-bold mb-3">Coordonnées</p>
-						<div class="mb-2">
-							<i class="bi bi-envelope me-2"></i>
-							{{ pastry_chef.email }}
-						</div>
-						{% if pastry_chef.phone %}
-							<div class="mb-2">
-								<i class="bi bi-telephone me-2"></i>
-								{{ pastry_chef.phone }}
+		{% if is_granted('PASTRYCHEF_EDIT', pastry_chef) %}
+			<div
+				class="row mb-4">
+				<!-- Mes Commandes -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-3">Mes Commandes</p>
+							<div class="d-grid gap-2">
+								<a href="{{ path('app_view_pastry_chef_requests', {'id': pastry_chef.id}) }}" class="btn btn-outline-dark btn-sm">
+									Voir mes commandes
+								</a>
+								<small class="text-muted">{{ pastry_chef.requestOrders|length }}
+									commande(s)</small>
 							</div>
-						{% endif %}
-						{% if pastry_chef.city %}
-							<div class="mb-2">
-								<i class="bi bi-geo-alt me-2"></i>
-								{{ pastry_chef.city }}
-							</div>
-						{% endif %}
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Liens et réseaux -->
-			<div class="col-md-6 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body">
-						<p class="fw-bold mb-3">Liens</p>
-						{% if pastry_chef.websiteLink %}
-							<div class="mb-2">
-								<i class="bi bi-globe me-2"></i>
-								<a href="{{ pastry_chef.websiteLink }}" target="_blank" class="text-decoration-none">Site web</a>
+				<!-- Mes Pâtisseries -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-3">Mes Pâtisseries</p>
+							<div class="d-grid gap-2">
+								<a href="{{ path('app_pastry_new') }}" class="btn btn-outline-dark btn-sm">
+									<i class="bi bi-plus-circle me-1"></i>Créer
+								</a>
+								<small class="text-muted">{{ pastry_chef.pastries|length }}
+									création(s)</small>
 							</div>
-						{% endif %}
-						{% if pastry_chef.socialLink %}
-							<div class="mb-2">
-								<i class="bi bi-link-45deg me-2"></i>
-								<a href="{{ pastry_chef.socialLink }}" target="_blank" class="text-decoration-none">Réseau social</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Commentaires -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-3">Mes Commentaires</p>
+							<div class="d-grid gap-2">
+								<a href="{{path('app_pastry_chef_pastry_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
+									<i class="bi bi-cake me-1"></i>Sur mes créations
+								</a>
+								<a href="{{path('app_pastry_chef_comments', {'id': pastry_chef.id})}}" class="btn btn-outline-dark btn-sm">
+									<i class="bi bi-person me-1"></i>Sur mon profil
+								</a>
 							</div>
-						{% endif %}
-						<div class="mt-3">
-							<small class="text-muted">
-								Membre depuis
-								{{ pastry_chef.createdAt|date('d/m/Y') }}
-							</small>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		{% else %}
+
+
+			<!-- SECTION INFORMATIONS PROFESSIONNELLES -->
+			<div
+				class="row mb-4">
+				<!-- Expérience -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-2">Expérience</p>
+							<h6 class="text-primary">{{ pastry_chef.experience }}
+								ans</h6>
+						</div>
+					</div>
+				</div>
+
+				<!-- Tarif -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-2">Tarif horaire</p>
+							<h6 class="text-primary">{{ pastry_chef.price }}
+								€/h</h6>
+						</div>
+					</div>
+				</div>
+
+				<!-- Statut vérification -->
+				<div class="col-md-4 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-2">Profil</p>
+							{% if pastry_chef.isVerified %}
+								<span class="badge bg-success">Vérifié</span>
+							{% else %}
+								<span class="badge bg-warning">En attente</span>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- SECTION COORDONNÉES ET LIENS -->
+			<div
+				class="row">
+				<!-- Coordonnées -->
+				<div class="col-md-6 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body">
+							<p class="fw-bold mb-3">Coordonnées</p>
+							<div class="mb-2">
+								<i class="bi bi-envelope me-2"></i>
+								{{ pastry_chef.email }}
+							</div>
+							{% if pastry_chef.phone %}
+								<div class="mb-2">
+									<i class="bi bi-telephone me-2"></i>
+									{{ pastry_chef.phone }}
+								</div>
+							{% endif %}
+							{% if pastry_chef.city %}
+								<div class="mb-2">
+									<i class="bi bi-geo-alt me-2"></i>
+									{{ pastry_chef.city }}
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<!-- Liens et réseaux -->
+				<div class="col-md-6 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body">
+							<p class="fw-bold mb-3">Liens</p>
+							{% if pastry_chef.websiteLink %}
+								<div class="mb-2">
+									<i class="bi bi-globe me-2"></i>
+									<a href="{{ pastry_chef.websiteLink }}" target="_blank" class="text-decoration-none">Site web</a>
+								</div>
+							{% endif %}
+							{% if pastry_chef.socialLink %}
+								<div class="mb-2">
+									<i class="bi bi-link-45deg me-2"></i>
+									<a href="{{ pastry_chef.socialLink }}" target="_blank" class="text-decoration-none">Réseau social</a>
+								</div>
+							{% endif %}
+							<div class="mt-3">
+								<small class="text-muted">
+									Membre depuis
+									{{ pastry_chef.createdAt|date('d/m/Y') }}
+								</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
 
 		<!-- Galerie Mes Pâtisseries -->
 		<div class="row">
@@ -200,25 +221,50 @@
 										</div>
 									</div>
 
-									<div class="card-body">
-										<p class="card-text small text-muted mb-2">
+									<div class="card-body d-flex flex-column">
+										<p class="card-text small text-muted mb-2 flex-grow-1">
 											{{ pastry.description|length > 100 ? pastry.description|slice(0, 100) ~ '...' : pastry.description }}
 										</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<small class="text-muted">
+
+										<div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-auto">
+
+											<small class="text-muted mb-2 mb-md-0">
 												<i class="bi bi-calendar me-1"></i>
 												{{ pastry.createdAt|date('d/m/Y') }}
 											</small>
-											<div class="btn-group btn-group-sm">
-												<a href="{{ path('app_pastry_show', {'id': pastry.id}) }}" class="btn btn-outline-dark" title="Voir détails">
-													<i class="bi bi-eye"></i>
+
+											<!-- BOUTONS AVEC LARGEUR MOBILE -->
+											<div class="d-flex  flex-md-row justify-content-center gap-2 ">
+												<a href="{{ path('app_pastry_show', {'id': pastry.id}) }}" class="btn btn-outline-dark btn-sm">
+													<span class="d-none d-md-inline">
+														<i class="bi bi-eye"></i>
+													</span>
+													<span class="d-inline d-md-none">
+														<i class="bi bi-eye"></i>
+														Voir
+													</span>
 												</a>
-												<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn btn-outline-secondary" title="Modifier">
-													<i class="bi bi-pencil"></i>
-												</a>
-												<a href="{{ path('app_pastry_delete', {'id': pastry.id}) }}" class="btn btn-outline-primary" title="Modifier">
-													<i class="bi bi-trash"></i>
-												</a>
+
+												{% if is_granted('PASTRYCHEF_EDIT', pastry_chef) %}
+													<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn btn-outline-dark btn-sm">
+														<span class="d-none d-md-inline">
+															<i class="bi bi-pencil"></i>
+														</span>
+														<span class="d-inline d-md-none">
+															<i class="bi bi-pencil"></i>
+															Modifier
+														</span>
+													</a>
+													<a href="{{ path('app_pastry_delete', {'id': pastry.id}) }}" class="btn btn-outline-dark btn-sm">
+														<span class="d-none d-md-inline">
+															<i class="bi bi-trash"></i>
+														</span>
+														<span class="d-inline d-md-none">
+															<i class="bi bi-trash"></i>
+															Supprimer
+														</span>
+													</a>
+												{% endif %}
 											</div>
 										</div>
 									</div>
@@ -238,7 +284,6 @@
 				{% endif %}
 			</div>
 		</div>
-
 		<!-- BOUTONS ACTION -->
 		<div class="row mt-4">
 			<div class="col-12 d-flex justify-content-between">
@@ -246,7 +291,6 @@
 					<i class="bi bi-arrow-left me-2"></i>Retour à la liste
 				</a>
 				<div>
-					{{ include('pastry_chef/_delete_form.html.twig') }}
 				</div>
 			</div>
 		</div>

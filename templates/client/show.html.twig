@@ -18,49 +18,50 @@
 						<h5 class="mb-0 fw-bold">{{ client.pseudo }}</h5>
 					</div>
 				</div>
-				<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="btn btn-outline-dark">
-					<span class="d-none d-md-inline fw-bold">
-						<i class="bi bi-pencil"></i>
-						Modifier Profil
-					</span>
-					<span class="d-inline d-md-none fw-bold">
-						<i class="bi bi-pencil"></i>
-					</span>
-				</a>
+				{% if is_granted('CLIENT_EDIT', client) %}
+					<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="btn btn-outline-dark">
+						<span class="d-none d-md-inline fw-bold">
+							<i class="bi bi-pencil"></i>
+							Modifier Profil
+						</span>
+						<span class="d-inline d-md-none fw-bold">
+							<i class="bi bi-pencil"></i>
+						</span>
+					</a>
+				{% endif %}
 			</div>
 		</div>
-
 		<!-- SECTION DEMANDES ET CONTENU -->
-		<div
-			class="row">
-			<!-- Bloc Mes Demandes -->
-			<div class="col-md-6 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-3">Mes Demandes</p>
-						<a href="{{ path('app_view_client_requests', {'id': client.id}) }}" class="btn btn-outline-dark">
-
-							Voir mes demandes</a>
+		{% if is_granted('CLIENT_EDIT', client) %}
+			<div
+				class="row">
+				<!-- Bloc Mes Demandes -->
+				<div class="col-md-6 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-3">Mes Demandes</p>
+							<a href="{{ path('app_view_client_requests', {'id': client.id}) }}" class="btn btn-outline-dark">
+								Voir mes demandes</a>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Bloc Mon contenu -->
-			<div class="col-md-6 mb-3">
-				<div class="card bg-light h-100">
-					<div class="card-body text-center">
-						<p class="fw-bold mb-3">Mon contenu :</p>
-						<div class="d-grid gap-2">
-							<a href="{{path('app_client_comment_pastry', {'id': client.id})}}" class="btn btn-outline-dark">
-								Mes Commentaires Pâtisserie</a>
+				<!-- Bloc Mon contenu -->
+				<div class="col-md-6 mb-3">
+					<div class="card bg-light h-100">
+						<div class="card-body text-center">
+							<p class="fw-bold mb-3">Mon contenu :</p>
+							<div class="d-grid gap-2">
+								<a href="{{path('app_client_comment_pastry', {'id': client.id})}}" class="btn btn-outline-dark">
+									Mes Commentaires Pâtisserie</a>
 
-							<a href="{{path('app_client_comment_chef', {'id': client.id})}}" class="btn btn-outline-dark">Mes Commentaires Pâtissiers
-							</a>
+								<a href="{{path('app_client_comment_chef', {'id': client.id})}}" class="btn btn-outline-dark">Mes Commentaires Pâtissiers
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
+		{% endif %}
 	</div>
 {% endblock %}

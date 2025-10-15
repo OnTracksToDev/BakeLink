@@ -10,11 +10,13 @@ use App\Entity\RequestOrder;
 use App\Form\RequestOrderType;
 use App\Service\RequestOrderService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Security\Voter\RequestOrderVoter;
 use App\Repository\RequestOrderRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/request/order')]
@@ -48,7 +50,6 @@ class RequestOrderController extends AbstractController
         ]);
     }
 
-
     #[Route('/new/{pastryChefId}', name: 'app_request_order_new_pastrychef', methods: ['GET', 'POST'])]
     public function newFromPastryChef(Request $request, EntityManagerInterface $entityManager, RequestOrderService $requestOrderService, Security $security, ?int $pastryChefId = null): Response
     {
@@ -76,21 +77,19 @@ class RequestOrderController extends AbstractController
             }
         }
 
-
-
         return $this->render('request_order/new.html.twig', [
             'request_order' => $requestOrder,
             'form' => $form,
         ]);
     }
 
-
     #[Route('/{id}', name: 'app_request_order_show', methods: ['GET', 'POST'])]
+    #[IsGranted(RequestOrderVoter::VIEW, subject: 'requestOrder')]
     public function show(RequestOrder $requestOrder, EntityManagerInterface $entityManager, Request $request): Response
     {
         $message = new Message();
         $message->setRequestOrder($requestOrder);
-        
+
         /** @var UserInterface $user */
         $user = $this->getUser();
         $sender = $user->getId();
@@ -117,9 +116,8 @@ class RequestOrderController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/{id}/edit', name: 'app_request_order_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(RequestOrderVoter::EDIT, subject: 'requestOrder')]
     public function edit(Request $request, RequestOrder $requestOrder, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RequestOrderType::class, $requestOrder);
@@ -138,6 +136,7 @@ class RequestOrderController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_request_order_delete', methods: ['POST'])]
+    #[IsGranted(RequestOrderVoter::DELETE, subject: 'requestOrder')]
     public function delete(Request $request, RequestOrder $requestOrder, EntityManagerInterface $entityManager): Response
     {
 
@@ -158,6 +157,7 @@ class RequestOrderController extends AbstractController
     #[Route('/pastry-chef/{id}/requests', name: 'app_view_pastry_chef_requests', methods: ['GET'])]
     public function viewPastryChefRequests(PastryChef $pastryChef): Response
     {
+        $this->denyAccessUnlessGranted('PASTRYCHEF_EDIT', $pastryChef);
         //Request Order PastryChef
         $requests = $pastryChef->getRequestOrders()->getValues();
         //tri 
@@ -173,6 +173,8 @@ class RequestOrderController extends AbstractController
     #[Route('/client/{id}/requests', name: 'app_view_client_requests', methods: ['GET'])]
     public function viewClientRequests(Client $client): Response
     {
+        // Vérifie que l'utilisateur est bien le propriétaire du profil
+        $this->denyAccessUnlessGranted('CLIENT_EDIT', $client);
         //Request Order Client
         $requests = $client->getRequestOrders()->getValues();
         usort($requests, function (RequestOrder $a, RequestOrder $b) {

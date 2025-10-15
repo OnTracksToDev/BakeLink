@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\PastryChef;
 use App\Entity\CommentPastryChef;
 use App\Form\CommentPastryChefType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -59,6 +58,7 @@ class CommentPastryChefController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_comment_pastry_chef_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(CommentPastryChefVoter::EDIT, subject: 'commentPastryChef')]
     public function edit(Request $request, CommentPastryChef $commentPastryChef, EntityManagerInterface $entityManager): Response
     {
         //récupére pastryChef lié au commentaire

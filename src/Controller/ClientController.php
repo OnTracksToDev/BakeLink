@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Message;
 use App\Form\ClientType;
+use App\Security\Voter\ClientVoter;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -58,6 +60,7 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_client_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(ClientVoter::EDIT, subject: 'client')]
     public function edit(Request $request, Client $client, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ClientType::class, $client);
@@ -77,12 +80,13 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_client_delete', methods: ['POST'])]
+    #[IsGranted(ClientVoter::DELETE, subject: 'client')]
     public function delete(Request $request, Client $client, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
 
         if ($this->isCsrfTokenValid('delete' . $client->getId(), $request->request->get('_token'))) {
-             // Déconnexion utilisateur
-        $tokenStorage->setToken(null);
+            // Déconnexion utilisateur
+            $tokenStorage->setToken(null);
             // vide message
             $messages = $entityManager->getRepository(Message::class)->findByClientRequests($client);
             // Supprime messages

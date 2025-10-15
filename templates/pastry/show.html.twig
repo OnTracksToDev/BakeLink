@@ -1,44 +1,326 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pastry
+{% block title %}Détails de la pâtisserie
 {% endblock %}
 
 {% block body %}
-	<h1>Pastry</h1>
-	<img src="{{ pastry.photoUrl }}" alt="{{ pastry.title }}">
+	<div class="container py-5">
 
-	<table class="table">
-		<tbody>
-			<tr>
-				<th>Id</th>
-				<td>{{ pastry.id }}</td>
-			</tr>
-			<tr>
-				<th>PhotoUrl</th>
-				<td>{{ pastry.photoUrl }}</td>
-			</tr>
-			<tr>
-				<th>Title</th>
-				<td>{{ pastry.title }}</td>
-			</tr>
-			<tr>
-				<th>Description</th>
-				<td>{{ pastry.description }}</td>
-			</tr>
-			<tr>
-				<th>CreatedAt</th>
-				<td>{{ pastry.createdAt ? pastry.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-			<tr>
-				<th>UpdatedAt</th>
-				<td>{{ pastry.updatedAt ? pastry.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-		</tbody>
-	</table>
+		<!-- SECTION TITRE ET ACTIONS -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body d-flex align-items-center justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="rounded-circle overflow-hidden me-3 d-none d-md-block" style="width:60px; height:60px;">
+						<img src="{{ pastry.photoUrl }}" alt="{{ pastry.title }}" class="w-100 h-100 object-fit-cover">
+					</div>
+					<div>
+						<h1 class="mb-0 fw-bold">{{ pastry.title }}</h1>
+						<p class="mb-0 text-muted">Par
+							{{ pastry.pastryChef.pseudo }}</p>
+					</div>
+				</div>
+				<div class="d-flex align-items-center gap-2">
+					{% if is_granted('PASTRY_EDIT', pastry) %}
+						<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn btn-outline-dark">
+							<span class="d-none d-md-inline fw-bold">
+								<i class="bi bi-pencil"></i>
+								Modifier
+							</span>
+							<span class="d-inline d-md-none fw-bold">
+								<i class="bi bi-pencil"></i>
+							</span>
+						</a>
+					{% endif %}
+					
+					{% if is_granted('PASTRY_DELETE', pastry) %}
+						{{ include('pastry/_delete_form.html.twig') }}
+					{% endif %}
+				</div>
+			</div>
+		</div>
 
-	<a href="{{ path('app_pastry_index') }}">back to list</a>
+		<!-- SECTION PRINCIPALE -->
+		<div class="row mb-5">
+			<!-- Image -->
+			<div class="col-lg-6 mb-4">
+				<div class="card border-0 shadow-sm">
+					<img src="{{ pastry.photoUrl }}" alt="{{ pastry.title }}" class="card-img-top rounded" style="height: 400px; object-fit: cover;">
+				</div>
+			</div>
 
-	<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}">edit</a>
+			<!-- Informations -->
+			<div class="col-lg-6 mb-4">
+				<div class="card border-0 shadow-sm h-100">
+					<div class="card-body">
+						<h4 class="fw-bold mb-3 border-bottom pb-2">
+							<i class="bi bi-info-circle me-2"></i>Description
+						</h4>
+						<p class="card-text mb-4">{{ pastry.description }}</p>
 
-	{{ include('pastry/_delete_form.html.twig') }}
+						<div class="bg-light rounded p-3">
+							<h6 class="fw-bold mb-3">Informations</h6>
+							<div class="mb-2 d-flex justify-content-between">
+								<span class="text-muted">Pâtissier :</span>
+								{% if not app.user or (app.user and (not app.user.isVerified or not app.user.isProfileCompleted)) %}
+									<div class="alert alert-warning py-1 mb-0" role="alert">
+										<small>
+											{% if not app.user %}
+												Connexion requise
+											{% else %}
+												Profil requis
+											{% endif %}
+										</small>
+									</div>
+								{% else %}
+									<div class="d-flex align-items-center">
+										<a href="{{ path('app_pastry_chef_show', {'id': pastry.pastryChef.id}) }}" class="badge bg-primary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+											{{ pastry.pastryChef.pseudo }}<i class="bi bi-arrow-up-right ms-1 small"></i>
+										</a>
+									</div>
+								{% endif %}
+							</div>
+							<div class="mb-2 d-flex justify-content-between">
+								<span class="text-muted">Créée le :</span>
+								<span class="fw-semibold">{{ pastry.createdAt ? pastry.createdAt|date('d/m/Y') : '' }}</span>
+							</div>
+							{% if pastry.updatedAt %}
+								<div class="d-flex justify-content-between">
+									<span class="text-muted">Modifiée le :</span>
+									<span class="fw-semibold">{{ pastry.updatedAt ? pastry.updatedAt|date('d/m/Y') : '' }}</span>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECTION COMMENTAIRES -->
+		<div class="row mb-4">
+			<div class="col-12">
+				<div class="card border-0 shadow-sm">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<h4 class="fw-bold mb-0">
+								<i class="bi bi-chat-text me-2"></i>
+								{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}
+							</h4>
+							<small class="text-muted">Les commentaires les plus récents</small>
+						</div>
+
+						{% if comments is not empty %}
+							<!-- Commentaires visibles -->
+							<div class="mb-4">
+								{% for comment in comments|slice(0, 3) %}
+									<div class="card bg-light mb-3 border-0">
+										<div class="card-body">
+											<div class="d-flex align-items-start">
+												<img class="rounded-circle me-3" src="{{ comment.client.photoUrl ?? '/images/default-avatar.png' }}" alt="avatar" width="50" height="50" style="object-fit: cover;">
+												<div class="flex-grow-1">
+													<div class="d-flex justify-content-between align-items-start">
+														<div>
+															<h6 class="fw-bold mb-1">{{ comment.client.pseudo }}</h6>
+															<small class="text-muted">
+																<i class="bi bi-calendar me-1"></i>
+																{{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}
+															</small>
+														</div>
+														{% if is_granted('COMMENT_PASTRY_EDIT', comment) %}
+															<div class="btn-group btn-group-sm">
+																<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+																	<i class="bi bi-pencil"></i>
+																</a>
+																<form method="post" action="{{ path('app_comment_pastry_delete', {'id': comment.id}) }}" class="d-inline">
+																	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+																	<button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+																		<i class="bi bi-trash"></i>
+																	</button>
+																</form>
+															</div>
+														{% endif %}
+													</div>
+													<p class="mt-2 mb-0">{{ comment.contentComment }}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+
+							<!-- Commentaires cachés -->
+							{% if comments|length > 3 %}
+								<div id="hiddenComments" style="display: none;">
+									{% for comment in comments|slice(3) %}
+										<div class="card bg-light mb-3 border-0">
+											<div class="card-body">
+												<div class="d-flex align-items-start">
+													<img class="rounded-circle me-3" src="{{ comment.client.photoUrl ?? '/images/default-avatar.png' }}" alt="avatar" width="50" height="50" style="object-fit: cover;">
+													<div class="flex-grow-1">
+														<div class="d-flex justify-content-between align-items-start">
+															<div>
+																<h6 class="fw-bold mb-1">{{ comment.client.pseudo }}</h6>
+																<small class="text-muted">
+																	<i class="bi bi-calendar me-1"></i>
+																	{{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}
+																</small>
+															</div>
+															{% if is_granted('COMMENT_PASTRY_EDIT', comment) %}
+																<div class="btn-group btn-group-sm">
+																	<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+																		<i class="bi bi-pencil"></i>
+																	</a>
+																	<form method="post" action="{{ path('app_comment_pastry_delete', {'id': comment.id}) }}" class="d-inline">
+																		<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+																		<button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+																			<i class="bi bi-trash"></i>
+																		</button>
+																	</form>
+																</div>
+															{% endif %}
+														</div>
+														<p class="mt-2 mb-0">{{ comment.contentComment }}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								</div>
+
+								<!-- Boutons Voir plus/Réduire -->
+								<div class="text-center">
+									<button id="showMoreBtn" class="btn btn-outline-dark">
+										<i class="bi bi-chevron-down me-1"></i>Voir plus de commentaires
+									</button>
+									<button id="showLessBtn" class="btn btn-outline-dark" style="display: none;">
+										<i class="bi bi-chevron-up me-1"></i>Réduire les commentaires
+									</button>
+								</div>
+							{% endif %}
+						{% else %}
+							<div class="text-center py-4">
+								<i class="bi bi-chat-text display-4 text-muted"></i>
+								<p class="text-muted mt-2">Aucun commentaire pour le moment</p>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SECTION AJOUTER UN COMMENTAIRE -->
+		{% if not app.user %}
+			<div class="row mb-4">
+				<div class="col-12">
+					<div class="alert alert-info text-center">
+						<i class="bi bi-info-circle me-2"></i>
+						<a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a> pour ajouter un commentaire
+					</div>
+				</div>
+			</div>
+		{% elseif not app.user.isVerified or not app.user.isProfileCompleted %}
+			<div class="row mb-4">
+				<div class="col-12">
+					<div class="alert alert-warning text-center">
+						<i class="bi bi-exclamation-triangle me-2"></i>
+						{% if not app.user.isVerified %}
+							Veuillez valider votre email pour rédiger des commentaires
+						{% else %}
+							Veuillez compléter votre profil pour rédiger des commentaires
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="row mb-4">
+				<div class="col-12">
+					<div class="card border-0 shadow-sm">
+						<div class="card-body">
+							<h4 class="fw-bold mb-3">
+								<i class="bi bi-plus-circle me-2"></i>Ajouter un commentaire
+							</h4>
+
+							{% for flashMessage in app.flashes('success') %}
+								<div class="alert alert-success d-flex align-items-center">
+									<i class="bi bi-check-circle me-2"></i>
+									{{ flashMessage }}
+								</div>
+							{% endfor %}
+
+							{% if form is not null %}
+								{{ form_start(form) }}
+
+								<div class="mb-3">
+									{{ form_label(form.contentComment, 'Votre commentaire', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+									<div class="input-group">
+										<span class="input-group-text bg-light">
+											<i class="bi bi-chat-text text-muted"></i>
+										</span>
+										{{ form_widget(form.contentComment, {
+											'attr': {
+												'class': 'form-control',
+												'rows': 4,
+												'placeholder': 'Partagez votre avis sur cette pâtisserie...'
+											}
+										}) }}
+									</div>
+									{{ form_errors(form.contentComment) }}
+								</div>
+
+								<!-- Champs cachés -->
+								{{ form_widget(form.createdAt, {'attr': {'hidden': true}}) }}
+								{{ form_widget(form.updatedAt, {'attr': {'hidden': true}}) }}
+								{{ form_widget(form.client, {'attr': {'hidden': true}}) }}
+								{{ form_widget(form.pastry, {'attr': {'hidden': true}}) }}
+
+								<div class="text-center">
+									<button type="submit" class="btn btn-dark">
+										<i class="bi bi-send me-2"></i>Publier le commentaire
+									</button>
+								</div>
+
+								{{ form_end(form) }}
+							{% else %}
+								<div class="alert alert-info text-center">
+									<i class="bi bi-info-circle me-2"></i>
+									Seuls les clients peuvent ajouter des commentaires
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+		<!-- BOUTON RETOUR -->
+		<div class="row">
+			<div class="col-12 text-center">
+				<a href="javascript:history.back()" class="btn btn-outline-secondary">
+					<i class="bi bi-arrow-left me-2"></i>Retour
+				</a>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const showMoreBtn = document.getElementById('showMoreBtn');
+const showLessBtn = document.getElementById('showLessBtn');
+const hiddenComments = document.getElementById('hiddenComments');
+
+if (showMoreBtn && hiddenComments) {
+showMoreBtn.addEventListener('click', function () {
+hiddenComments.style.display = 'block';
+showMoreBtn.style.display = 'none';
+showLessBtn.style.display = 'inline-block';
+});
+
+showLessBtn.addEventListener('click', function () {
+hiddenComments.style.display = 'none';
+showMoreBtn.style.display = 'inline-block';
+showLessBtn.style.display = 'none';
+});
+}
+});
+	</script>
 {% endblock %}

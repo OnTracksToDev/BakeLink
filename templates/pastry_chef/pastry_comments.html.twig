@@ -39,18 +39,20 @@
 						{% for commentPastryChef in commentPastryChefs %}
 							<div class="col-md-6 col-lg-4 mb-3">
 								<div class="card bg-light h-100">
-									<div class="card-body">
+									<div class="card-body d-flex flex-column">
 										<h6 class="fw-bold mb-2">De :
 											{{ commentPastryChef.client.pseudo }}</h6>
 										{% set words = commentPastryChef.contentComment|split(' ') %}
 										{% set shortContent = words|slice(0, 5)|join(' ') %}
-										<p class="card-text">{{ shortContent }}
+										<p class="card-text flex-grow-1">{{ shortContent }}
 											{% if words|length > 5 %}...
 											{% endif %}
 										</p>
 										<p class="card-text small text-muted mb-3">Date :
 											{{ commentPastryChef.createdAt ? commentPastryChef.createdAt|date('d/m/Y H:i') : '' }}</p>
-										<div class="d-flex justify-content-center">
+
+										<!-- BOUTONS  -->
+										<div class="d-flex flex-column flex-md-row justify-content-center gap-2 mt-auto">
 											<a href="{{ path('app_pastry_show', {'id': commentPastryChef.pastry.id}) }}" class="btn btn-outline-dark btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-eye"></i>
@@ -58,6 +60,17 @@
 												</span>
 												<span class="d-inline d-md-none">
 													<i class="bi bi-eye"></i>
+													Pâtisserie
+												</span>
+											</a>
+											<a href="{{ path('app_comment_pastry_show', {'id': commentPastryChef.id}) }}" class="btn btn-outline-dark btn-sm">
+												<span class="d-none d-md-inline">
+													<i class="bi bi-chat-text"></i>
+													Voir le commentaire
+												</span>
+												<span class="d-inline d-md-none">
+													<i class="bi bi-chat-text"></i>
+													Commentaire
 												</span>
 											</a>
 										</div>

@@ -8,12 +8,14 @@ use App\Entity\PastryChef;
 use App\Form\PastryChefType;
 use App\Entity\CommentPastry;
 use App\Entity\CommentPastryChef;
+use App\Security\Voter\PastryChefVoter;
 use App\Repository\PastryChefRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\CommentPastryChefRepository;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -67,6 +69,7 @@ class PastryChefController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_pastry_chef_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(PastryChefVoter::EDIT, subject: 'pastryChef')]
     public function edit(Request $request, PastryChef $pastryChef, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PastryChefType::class, $pastryChef);
@@ -118,7 +121,7 @@ class PastryChefController extends AbstractController
             'commentPastryChefs' => $commentPastryChefs,
         ]);
     }
-        #[Route('/{id}/comments', name: 'app_pastry_chef_comments', methods: ['GET'])]
+    #[Route('/{id}/comments', name: 'app_pastry_chef_comments', methods: ['GET'])]
     public function viewComments(PastryChef $pastryChef, CommentPastryChefRepository $commentPastryChefRepository): Response
     {
         $comments = $commentPastryChefRepository->findBy(['pastryChef' => $pastryChef], ['createdAt' => 'DESC']);
@@ -128,5 +131,4 @@ class PastryChefController extends AbstractController
             'comments' => $comments,
         ]);
     }
-
 }

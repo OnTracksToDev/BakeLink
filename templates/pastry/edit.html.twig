@@ -1,13 +1,113 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Pastry{% endblock %}
+{% block title %}Modifier la Pâtisserie
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Pastry</h1>
+	<div
+		class="container py-5">
+		<!-- SECTION TITRE -->
+		<div class="card mb-4 bg-light">
+			<div class="card-body text-center">
+				<h1 class="mb-0 fw-bold">
+					<i class="bi bi-pencil-square me-2"></i>Modifier la Pâtisserie
+				</h1>
+				<p class="text-muted mb-0 mt-2">{{ pastry.title }}</p>
+			</div>
+		</div>
 
-    {{ include('pastry/_form.html.twig', {'button_label': 'Update'}) }}
+		<!-- SECTION FORMULAIRE -->
+		<div class="row justify-content-center">
+			<div class="col-md-10 col-lg-8">
+				<div class="card border-0 shadow-sm bg-light">
+					<div class="card-body p-4">
+						{{ form_errors(form) }}
+						{{ form_start(form) }}
 
-    <a href="{{ path('app_pastry_index') }}">back to list</a>
+						<!-- Informations principales -->
+						<div class="mb-4">
+							<h4 class="fw-bold text-dark mb-3 border-bottom pb-2">
+								<i class="bi bi-info-circle me-2"></i>Informations principales
+							</h4>
 
-    {{ include('pastry/_delete_form.html.twig') }}
+							<div class="mb-3">
+								{{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+								<div class="input-group">
+									<span class="input-group-text bg-light">
+										<i class="bi bi-text-paragraph text-muted"></i>
+									</span>
+									{{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Nom de votre pâtisserie'}}) }}
+								</div>
+								{{ form_errors(form.title) }}
+							</div>
+
+							<div class="mb-3">
+								{{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+								<div class="input-group">
+									<span class="input-group-text bg-light align-items-start pt-3">
+										<i class="bi bi-text-paragraph text-muted"></i>
+									</span>
+									{{ form_widget(form.description, {
+										'attr': {
+											'class': 'form-control',
+											'rows': 4,
+											'placeholder': 'Décrivez votre pâtisserie...'
+										}
+									}) }}
+								</div>
+								{{ form_errors(form.description) }}
+							</div>
+						</div>
+
+						<!-- Photo -->
+						<div class="mb-4">
+							<h4 class="fw-bold text-dark mb-3 border-bottom pb-2">
+								<i class="bi bi-image me-2"></i>Photo
+							</h4>
+
+							<div class="mb-3">
+								{{ form_label(form.photoUrl, 'Photo', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+								<div class="input-group">
+									<span class="input-group-text bg-light">
+										<i class="bi bi-link-45deg text-muted"></i>
+									</span>
+									{{ form_widget(form.photoUrl, {'attr': {'class': 'form-control', 'placeholder': 'https://exemple.com/photo.jpg'}}) }}
+								</div>
+								{{ form_errors(form.photoUrl) }}
+							</div>
+
+							{% if pastry.photoUrl %}
+								<div class="text-center mt-3">
+									<p class="fw-semibold mb-2">Aperçu actuel :</p>
+									<img src="{{ pastry.photoUrl }}" alt="Preview de {{ pastry.title }}" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+								</div>
+							{% endif %}
+						</div>
+
+						<!-- Champs cachés -->
+						{{ form_widget(form.category, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.createdAt, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.updatedAt, {'attr': {'hidden': true}}) }}
+						{{ form_widget(form.pastryChef, {'attr': {'hidden': true}}) }}
+
+						<!-- BOUTONS ACTION -->
+						<div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+							<a href="{{ path('app_pastry_show', {'id': pastry.id}) }}" class="btn btn-outline-secondary">
+								<i class="bi bi-arrow-left me-2"></i>Retour aux détails
+							</a>
+
+							<div class="d-flex gap-2">
+								<button class="btn btn-dark" type="submit">
+									<i class="bi bi-check-lg me-2"></i>Enregistrer les modifications
+								</button>
+								{{ form_end(form) }}
+								{{ include('pastry/_delete_form.html.twig') }}
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
