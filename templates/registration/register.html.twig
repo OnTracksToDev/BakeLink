@@ -9,12 +9,12 @@
 			<div
 				class="col-md-8 col-lg-6">
 				<!-- Carte d'inscription -->
-				<div class="card shadow-sm border-0">
+				<div class="card bg-light shadow-sm border-0">
 					<div
 						class="card-body p-5">
 						<!-- En-tête -->
 						<div class="text-center mb-4">
-							<h1 class="h3 mb-3 fw-bold text-dark">Inscription</h1>
+							<h1 class="h3 mb-3 fw-bold">Inscription</h1>
 							<p class="text-muted">Créez votre compte en quelques étapes</p>
 						</div>
 
@@ -35,7 +35,7 @@
 						<div class="mb-4">
 							<label for="{{ registrationForm.roles.vars.id }}" class="form-label fw-semibold">Inscription en tant que :</label>
 							<div class="input-group">
-								<span class="input-group-text bg-light border-end-0">
+								<span class="input-group-text bg-body border-end-0">
 									<i class="bi bi-person-badge text-muted"></i>
 								</span>
 								{{ form_widget(registrationForm.roles, {
@@ -50,7 +50,7 @@
 						<div class="mb-3">
 							<label for="{{ registrationForm.email.vars.id }}" class="form-label fw-semibold">Email</label>
 							<div class="input-group">
-								<span class="input-group-text bg-light border-end-0">
+								<span class="input-group-text bg-body border-end-0">
 									<i class="bi bi-envelope text-muted"></i>
 								</span>
 								{{ form_widget(registrationForm.email, {
@@ -67,7 +67,7 @@
 						<div class="mb-3">
 							<label for="{{ registrationForm.plainPassword.vars.id }}" class="form-label fw-semibold">Mot de passe</label>
 							<div class="input-group">
-								<span class="input-group-text bg-light border-end-0">
+								<span class="input-group-text bg-body border-end-0">
 									<i class="bi bi-lock text-muted"></i>
 								</span>
 								{{ form_widget(registrationForm.plainPassword, {
@@ -96,7 +96,7 @@
 
 						<!-- Bouton d'inscription -->
 						<div class="d-grid mb-3">
-							<button type="submit" class="btn btn-outline-dark fw-semibold">
+							<button type="submit" class="btn-action fw-semibold">
 								S'inscrire
 							</button>
 						</div>

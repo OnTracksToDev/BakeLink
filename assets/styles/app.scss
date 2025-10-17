@@ -11,6 +11,19 @@
    =========================== */
 @import "base/typography"; // Polices globales (Poppins, Roboto...)
 
+// ===============================
+// 🎨 MIXINS – Boutons BakeLink
+// ===============================
+@import "mixins/button-mixins";
+
+
+// ===============================
+// Composants
+// ===============================
+@import "components/my-buttons";
+
+
+
 /* ===========================
    ✍️ Bootswatch + Bootstrap
    =========================== */

@@ -1,0 +1,92 @@
+@mixin btn-action {
+  @extend .btn;
+  @extend .btn-outline-primary; 
+  @extend .text-light;      
+
+  border-width: 2px;
+  font-weight: 600;
+  border-radius: $border-radius;
+  transition: all 0.25s ease-in-out;
+
+  &:hover,
+  &:focus {
+    @extend .btn-outline-secondary; 
+    @extend .text-primary;          
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}
+
+@mixin btn-cancel {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+  @extend .text-dark;
+
+  border-width: 2px;
+  font-weight: 600;
+  border-radius: $border-radius;
+  transition: all 0.25s ease-in-out;
+
+  &:hover,
+  &:focus {
+    @extend .btn-outline-dark;
+    @extend .text-light;
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}
+@mixin btn-edit {
+  @extend .btn;
+  @extend .btn-outline-success;
+  @extend .text-light;
+  border-width: 2px;
+  font-weight: 600;
+  border-radius: $border-radius;
+  transition: all 0.25s ease-in-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken($success, 15%) !important;
+    border-color: darken($success, 10%);
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}
+
+@mixin btn-delete {
+  @extend .btn;
+  @extend .btn-outline-danger;
+  @extend .text-light;
+  border-width: 2px;
+  font-weight: 600;
+  border-radius: $border-radius;
+  transition: all 0.25s ease-in-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken($danger, 15%) !important;
+    border-color: darken($danger, 10%);
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}

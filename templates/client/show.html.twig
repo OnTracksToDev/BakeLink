@@ -19,7 +19,7 @@
 					</div>
 				</div>
 				{% if is_granted('CLIENT_EDIT', client) %}
-					<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="btn btn-outline-dark">
+					<a href="{{ path('app_client_edit', {'id': client.id}) }}" class="btn-edit">
 						<span class="d-none d-md-inline fw-bold">
 							<i class="bi bi-pencil"></i>
 							Modifier Profil
@@ -40,7 +40,7 @@
 					<div class="card bg-light h-100">
 						<div class="card-body text-center">
 							<p class="fw-bold mb-3">Mes Demandes</p>
-							<a href="{{ path('app_view_client_requests', {'id': client.id}) }}" class="btn btn-outline-dark">
+							<a href="{{ path('app_view_client_requests', {'id': client.id}) }}" class="btn-action">
 								Voir mes demandes</a>
 						</div>
 					</div>
@@ -52,10 +52,9 @@
 						<div class="card-body text-center">
 							<p class="fw-bold mb-3">Mon contenu :</p>
 							<div class="d-grid gap-2">
-								<a href="{{path('app_client_comment_pastry', {'id': client.id})}}" class="btn btn-outline-dark">
+								<a href="{{path('app_client_comment_pastry', {'id': client.id})}}" class="btn-action">
 									Mes Commentaires Pâtisserie</a>
-
-								<a href="{{path('app_client_comment_chef', {'id': client.id})}}" class="btn btn-outline-dark">Mes Commentaires Pâtissiers
+								<a href="{{path('app_client_comment_chef', {'id': client.id})}}" class="btn-action">Mes Commentaires Pâtissiers
 								</a>
 							</div>
 						</div>

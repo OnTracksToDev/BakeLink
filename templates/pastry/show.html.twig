@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container py-5">
+	<div
+		class="container py-5">
 
 		<!-- SECTION TITRE ET ACTIONS -->
 		<div class="card mb-4 bg-light">
@@ -21,7 +22,7 @@
 				</div>
 				<div class="d-flex align-items-center gap-2">
 					{% if is_granted('PASTRY_EDIT', pastry) %}
-						<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn btn-outline-dark">
+						<a href="{{ path('app_pastry_edit', {'id': pastry.id}) }}" class="btn-edit">
 							<span class="d-none d-md-inline fw-bold">
 								<i class="bi bi-pencil"></i>
 								Modifier
@@ -31,7 +32,7 @@
 							</span>
 						</a>
 					{% endif %}
-					
+
 					{% if is_granted('PASTRY_DELETE', pastry) %}
 						{{ include('pastry/_delete_form.html.twig') }}
 					{% endif %}
@@ -40,7 +41,8 @@
 		</div>
 
 		<!-- SECTION PRINCIPALE -->
-		<div class="row mb-5">
+		<div
+			class="row mb-5">
 			<!-- Image -->
 			<div class="col-lg-6 mb-4">
 				<div class="card border-0 shadow-sm">
@@ -50,14 +52,14 @@
 
 			<!-- Informations -->
 			<div class="col-lg-6 mb-4">
-				<div class="card border-0 shadow-sm h-100">
+				<div class="card bg-body border-0 shadow-sm h-100">
 					<div class="card-body">
 						<h4 class="fw-bold mb-3 border-bottom pb-2">
 							<i class="bi bi-info-circle me-2"></i>Description
 						</h4>
 						<p class="card-text mb-4">{{ pastry.description }}</p>
 
-						<div class="bg-light rounded p-3">
+						<div class="p-3">
 							<h6 class="fw-bold mb-3">Informations</h6>
 							<div class="mb-2 d-flex justify-content-between">
 								<span class="text-muted">Pâtissier :</span>
@@ -73,7 +75,7 @@
 									</div>
 								{% else %}
 									<div class="d-flex align-items-center">
-										<a href="{{ path('app_pastry_chef_show', {'id': pastry.pastryChef.id}) }}" class="badge bg-primary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+										<a href="{{ path('app_pastry_chef_show', {'id': pastry.pastryChef.id}) }}" class="badge btn-action text-decoration-none fs-6 px-3 py-2 rounded">
 											{{ pastry.pastryChef.pseudo }}<i class="bi bi-arrow-up-right ms-1 small"></i>
 										</a>
 									</div>
@@ -98,7 +100,7 @@
 		<!-- SECTION COMMENTAIRES -->
 		<div class="row mb-4">
 			<div class="col-12">
-				<div class="card border-0 shadow-sm">
+				<div class="card bg-light border-0 shadow-sm">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center mb-4">
 							<h4 class="fw-bold mb-0">
@@ -112,12 +114,12 @@
 							<!-- Commentaires visibles -->
 							<div class="mb-4">
 								{% for comment in comments|slice(0, 3) %}
-									<div class="card bg-light mb-3 border-0">
+									<div class="card bg-body mb-3 border-0">
 										<div class="card-body">
 											<div class="d-flex align-items-start">
 												<img class="rounded-circle me-3" src="{{ comment.client.photoUrl ?? '/images/default-avatar.png' }}" alt="avatar" width="50" height="50" style="object-fit: cover;">
 												<div class="flex-grow-1">
-													<div class="d-flex justify-content-between align-items-start">
+													<div class="d-flex justify-content-between align-items-center">
 														<div>
 															<h6 class="fw-bold mb-1">{{ comment.client.pseudo }}</h6>
 															<small class="text-muted">
@@ -126,13 +128,13 @@
 															</small>
 														</div>
 														{% if is_granted('COMMENT_PASTRY_EDIT', comment) %}
-															<div class="btn-group btn-group-sm">
-																<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+															<div class="d-flex align-items-center">
+																<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn-edit btn-sm d-flex align-items-center justify-content-center me-2" title="Modifier" style="height: 31px; width: 31px;">
 																	<i class="bi bi-pencil"></i>
 																</a>
 																<form method="post" action="{{ path('app_comment_pastry_delete', {'id': comment.id}) }}" class="d-inline">
 																	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-																	<button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+																	<button type="submit" class="btn-delete btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
 																		<i class="bi bi-trash"></i>
 																	</button>
 																</form>
@@ -151,7 +153,7 @@
 							{% if comments|length > 3 %}
 								<div id="hiddenComments" style="display: none;">
 									{% for comment in comments|slice(3) %}
-										<div class="card bg-light mb-3 border-0">
+										<div class="card bg-body mb-3 border-0">
 											<div class="card-body">
 												<div class="d-flex align-items-start">
 													<img class="rounded-circle me-3" src="{{ comment.client.photoUrl ?? '/images/default-avatar.png' }}" alt="avatar" width="50" height="50" style="object-fit: cover;">
@@ -166,15 +168,10 @@
 															</div>
 															{% if is_granted('COMMENT_PASTRY_EDIT', comment) %}
 																<div class="btn-group btn-group-sm">
-																	<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn btn-outline-primary btn-sm" title="Modifier">
+																	<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn-edit btn-sm" title="Modifier">
 																		<i class="bi bi-pencil"></i>
 																	</a>
-																	<form method="post" action="{{ path('app_comment_pastry_delete', {'id': comment.id}) }}" class="d-inline">
-																		<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-																		<button type="submit" class="btn btn-outline-danger btn-sm" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
-																			<i class="bi bi-trash"></i>
-																		</button>
-																	</form>
+																	{{ include('comment_pastry/_delete_form.html.twig', {comment_pastry: comment }) }}
 																</div>
 															{% endif %}
 														</div>
@@ -188,10 +185,10 @@
 
 								<!-- Boutons Voir plus/Réduire -->
 								<div class="text-center">
-									<button id="showMoreBtn" class="btn btn-outline-dark">
+									<button id="showMoreBtn" class="btn-action">
 										<i class="bi bi-chevron-down me-1"></i>Voir plus de commentaires
 									</button>
-									<button id="showLessBtn" class="btn btn-outline-dark" style="display: none;">
+									<button id="showLessBtn" class="btn-action" style="display: none;">
 										<i class="bi bi-chevron-up me-1"></i>Réduire les commentaires
 									</button>
 								</div>
@@ -213,7 +210,8 @@
 				<div class="col-12">
 					<div class="alert alert-info text-center">
 						<i class="bi bi-info-circle me-2"></i>
-						<a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a> pour ajouter un commentaire
+						<a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a>
+						pour ajouter un commentaire
 					</div>
 				</div>
 			</div>
@@ -233,7 +231,7 @@
 		{% else %}
 			<div class="row mb-4">
 				<div class="col-12">
-					<div class="card border-0 shadow-sm">
+					<div class="card bg-light border-0 shadow-sm">
 						<div class="card-body">
 							<h4 class="fw-bold mb-3">
 								<i class="bi bi-plus-circle me-2"></i>Ajouter un commentaire
@@ -252,7 +250,7 @@
 								<div class="mb-3">
 									{{ form_label(form.contentComment, 'Votre commentaire', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
 									<div class="input-group">
-										<span class="input-group-text bg-light">
+										<span class="input-group-text bg-body">
 											<i class="bi bi-chat-text text-muted"></i>
 										</span>
 										{{ form_widget(form.contentComment, {
@@ -273,14 +271,14 @@
 								{{ form_widget(form.pastry, {'attr': {'hidden': true}}) }}
 
 								<div class="text-center">
-									<button type="submit" class="btn btn-dark">
+									<button type="submit" class="btn-action">
 										<i class="bi bi-send me-2"></i>Publier le commentaire
 									</button>
 								</div>
 
 								{{ form_end(form) }}
 							{% else %}
-								<div class="alert alert-info text-center">
+								<div class="alert alert-info text-dark text-center">
 									<i class="bi bi-info-circle me-2"></i>
 									Seuls les clients peuvent ajouter des commentaires
 								</div>
@@ -294,7 +292,7 @@
 		<!-- BOUTON RETOUR -->
 		<div class="row">
 			<div class="col-12 text-center">
-				<a href="javascript:history.back()" class="btn btn-outline-secondary">
+				<a href="javascript:history.back()" class="btn-cancel">
 					<i class="bi bi-arrow-left me-2"></i>Retour
 				</a>
 			</div>

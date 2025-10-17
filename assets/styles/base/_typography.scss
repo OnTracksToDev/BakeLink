@@ -1,15 +1,20 @@
+// Styles corporels - CORRIGÉS
 body {
   font-family: $font-family-base;
-  color: $neutral-dark;
-  background-color: $neutral-light;
-  line-height: 1.6;
+  color: $dark !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  color: $primary-color;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $headings-font-family;
+  color: $primary !important; // brun chocolat
 }
 
-p {
-  margin-bottom: 1rem;
+p, label {
+  color: $dark !important;
 }
+

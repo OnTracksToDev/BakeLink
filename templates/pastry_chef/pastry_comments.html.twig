@@ -27,11 +27,9 @@
 					</div>
 				{% else %}
 					<!-- Compteur de commentaires -->
-					<div class="card mb-4 bg-light">
-						<div class="card-body text-center">
-							<h4 class="mb-0">{{ commentPastryChefs|length > 1 ? commentPastryChefs|length ~ ' Commentaires' : commentPastryChefs|length ~ ' Commentaire' }}
-								trouvé(s)</h4>
-						</div>
+					<div class="text-center mb-4">
+						<h4 class="mb-0 text-dark">{{ commentPastryChefs|length > 1 ? commentPastryChefs|length ~ ' Commentaires' : commentPastryChefs|length ~ ' Commentaire' }}
+							trouvé(s)</h4>
 					</div>
 
 					<!-- Liste des commentaires -->
@@ -53,7 +51,7 @@
 
 										<!-- BOUTONS  -->
 										<div class="d-flex flex-column flex-md-row justify-content-center gap-2 mt-auto">
-											<a href="{{ path('app_pastry_show', {'id': commentPastryChef.pastry.id}) }}" class="btn btn-outline-dark btn-sm">
+											<a href="{{ path('app_pastry_show', {'id': commentPastryChef.pastry.id}) }}" class="btn-action btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-eye"></i>
 													Voir la pâtisserie
@@ -63,7 +61,7 @@
 													Pâtisserie
 												</span>
 											</a>
-											<a href="{{ path('app_comment_pastry_show', {'id': commentPastryChef.id}) }}" class="btn btn-outline-dark btn-sm">
+											<a href="{{ path('app_comment_pastry_show', {'id': commentPastryChef.id}) }}" class="btn-action btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-chat-text"></i>
 													Voir le commentaire
@@ -86,7 +84,7 @@
 		<!-- BOUTON RETOUR -->
 		<div class="row mt-4">
 			<div class="col text-center">
-				<a href="{{ path('app_pastry_chef_show', {'id': pastryChef.id}) }}" class="btn btn-outline-dark">
+				<a href="{{ path('app_pastry_chef_show', {'id': pastryChef.id}) }}" class="btn-cancel">
 					Retour au Profil de
 					{{ pastryChef.pseudo }}
 				</a>

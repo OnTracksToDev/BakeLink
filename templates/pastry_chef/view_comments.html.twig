@@ -27,11 +27,9 @@
 					</div>
 				{% else %}
 					<!-- Compteur de commentaires -->
-					<div class="card mb-4 bg-light">
-						<div class="card-body text-center">
-							<h4 class="mb-0">{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}
-								trouvé(s)</h4>
-						</div>
+					<div class="text-center mb-4">
+						<h4 class="mb-0 text-dark">{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}
+							trouvé(s)</h4>
 					</div>
 
 					<!-- Liste des commentaires -->
@@ -51,7 +49,7 @@
 										<p class="card-text small text-muted mb-3">Date :
 											{{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}</p>
 										<div class="d-flex flex-column flex-md-row justify-content-center mt-auto">
-											<a href="{{ path('app_comment_pastry_chef_show', {'id': comment.id}) }}" class="btn btn-outline-dark btn-sm">
+											<a href="{{ path('app_comment_pastry_chef_show', {'id': comment.id}) }}" class="btn-action btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-eye"></i>
 													Voir le commentaire complet

@@ -1,0 +1,164 @@
+<nav class="navbar navbar-expand-lg navbar-primary bg-primary shadow-sm">
+	<div
+		class="container">
+		<!-- Logo -->
+		<a href="{{ path('app_home') }}" class="navbar-brand d-flex align-items-center">
+			<div
+				class="rounded-circle bg-white d-flex align-items-center justify-content-center me-2" style="width: 50px; height: 50px;">{# MON LOGO #}
+			</div>
+			<span class="fw-bold text-light">Bakelink</span>
+		</a>
+
+		<!-- Toggle mobile -->
+		<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+			<i class="bi bi-list text-light"></i>
+		</button>
+
+		<!-- Menu principal -->
+		<div
+			class="collapse navbar-collapse" id="navbarMain">
+			<!-- Tous les éléments à droite -->
+			<ul class="navbar-nav ms-auto">
+
+				{% if app.user %}
+					<!-- Admin -->
+					{% if 'ROLE_ADMIN' in app.user.roles %}
+						<li class="nav-item">
+							<a class="nav-link text-warning fw-bold d-flex align-items-center" href="{{ path('app_admin') }}">
+								<i class="bi bi-shield-check me-1"></i>
+								ADMIN
+							</a>
+						</li>
+					{% endif %}
+
+					<!-- Menu utilisateur connecté -->
+					<li class="nav-item dropdown">
+						<a class="nav-link text-light dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+							<div
+								class="rounded-circle overflow-hidden bg-light" style="width: 32px; height: 32px;">
+								{# <i class="bi bi-person-fill text-primary"></i> #}
+								<img src="{{ app.user.photoUrl }}" alt="{{ app.user.firstname }} {{ app.user.lastname }}" class="w-100 h-100 object-fit-cover">
+							</div>
+							<span class="d-none d-lg-inline">{{ app.user.pseudo }}</span>
+						</a>
+						<ul
+							class="dropdown-menu dropdown-menu-end shadow border-0 bg-body">
+							<!-- En-tête du dropdown -->
+							<li class="dropdown-header text-muted small px-3 py-2">
+								Connecté en tant que
+								<span class="fw-semibold">
+									{% if 'ROLE_CHEF' in app.user.roles %}
+										Pâtissier
+									{% elseif 'ROLE_CLIENT' in app.user.roles %}
+										Client
+									{% endif %}
+								</span>
+							</li>
+							<li><hr class="dropdown-divider my-1"></li>
+
+							<!-- SECTION PROFIL ET COMPTE -->
+							<li>
+								<a class="dropdown-item d-flex align-items-center" href="
+																																							{% if 'ROLE_CHEF' in app.user.roles %}
+																																								{{ path('app_pastry_chef_show', {'id': app.user.id}) }}
+																																							{% elseif 'ROLE_CLIENT' in app.user.roles %}
+																																								{{ path('app_client_show', {'id': app.user.id}) }}
+																																							{% endif %}
+																																						">
+									<i class="bi bi-person me-2"></i>
+									Mon Profil
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item d-flex align-items-center" href="">
+									<i class="bi bi-gear me-2"></i>
+									Paramètres du compte
+								</a>
+							</li>
+
+							<!-- SECTION CLIENT -->
+							{% if 'ROLE_CLIENT' in app.user.roles and app.user.isVerified and app.user.isProfileCompleted %}
+								<li><hr class="dropdown-divider my-1"></li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{ path('app_view_client_requests', {'id': app.user.id}) }}">
+										<i class="bi bi-inbox me-2"></i>
+										Mes Demandes
+									</a>
+								</li>
+								<!-- Commentaires du client -->
+								<li><hr class="dropdown-divider my-1"></li>
+								<li class="dropdown-header text-muted small px-3 py-1">
+									Mes Commentaires
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{path('app_client_comment_pastry', {'id': app.user.id})}}">
+										<i class="bi bi-cake me-2"></i>
+										Sur les pâtisseries
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{path('app_client_comment_chef', {'id': app.user.id})}}">
+										<i class="bi bi-person-badge me-2"></i>
+										Sur les pâtissiers
+									</a>
+								</li>
+							{% endif %}
+
+							<!-- SECTION PÂTISSIER -->
+							{% if 'ROLE_CHEF' in app.user.roles and app.user.isVerified and app.user.isProfileCompleted %}
+								<li><hr class="dropdown-divider my-1"></li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{ path('app_view_pastry_chef_requests', {'id': app.user.id}) }}">
+										<i class="bi bi-inbox me-2"></i>
+										Mes Demandes
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{ path('app_pastry_new') }}">
+										<i class="bi bi-plus-circle me-2"></i>
+										Ajouter une pâtisserie
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{ path('app_pastry_chef_pastry_comments', {'id': app.user.id}) }}">
+										<i class="bi bi-chat-dots me-2"></i>
+										Commentaires (pâtisseries)
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center" href="{{ path('app_pastry_chef_comments', {'id': app.user.id}) }}">
+										<i class="bi bi-person-check me-2"></i>
+										Commentaires (profil)
+									</a>
+								</li>
+							{% endif %}
+
+							<!-- SECTION DÉCONNEXION -->
+							<li><hr class="dropdown-divider my-1"></li>
+							<li>
+								<a class="dropdown-item d-flex align-items-center text-dark" href="{{ path('app_logout') }}">
+									<i class="bi bi-box-arrow-right me-2"></i>
+									Déconnexion
+								</a>
+							</li>
+						</ul>
+					</li>
+				{% else %}
+					<!-- Utilisateur non connecté -->
+					<li class="nav-item">
+						<a class="nav-link text-light d-flex align-items-center {{ app.request.attributes.get('_route') == 'app_register' ? 'active fw-semibold' }}" href="{{ path('app_register') }}">
+							<i class="bi bi-person-plus me-1 d-none d-sm-inline"></i>
+							Inscription
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-light d-flex align-items-center {{ app.request.attributes.get('_route') == 'app_login' ? 'active fw-semibold' }}" href="{{ path('app_login') }}">
+							<i class="bi bi-box-arrow-in-right me-1 d-none d-sm-inline"></i>
+							Connexion
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>

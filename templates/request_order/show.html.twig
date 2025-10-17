@@ -19,25 +19,25 @@
 						<!-- Statut -->
 						<div class="mb-4">
 							<span class="badge
-																											        {% if request_order.status == 'En cours' %}bg-info text-dark fs-6
-																											        {% elseif request_order.status == 'En attente' %}bg-warning text-dark fs-6
-																											        {% elseif request_order.status == 'Terminé' %}bg-success text-white fs-6
-																											        {% elseif request_order.status == 'Annulé' %}bg-danger text-white fs-6
-																											        {% else %}bg-secondary text-white fs-6{% endif %}
-																											        w-100 py-3 rounded-3 shadow">
+					        {% if request_order.status == 'En cours' %}bg-warning text-white fs-6
+					        {% elseif request_order.status == 'En attente' %}bg-body text-dark fs-6
+					        {% elseif request_order.status == 'Terminé' %}bg-success text-white fs-6
+					        {% elseif request_order.status == 'Annulé' %}bg-danger text-white fs-6
+					        {% else %}bg-secondary text-white fs-6{% endif %}
+					        w-100 py-3 rounded-3 shadow">
 								<strong>{{ request_order.status }}</strong>
 							</span>
 						</div>
 						<!-- Infos -->
 						<div class="card border-0 shadow-sm mb-4">
 							<div class="card-body p-0">
-								<div class="list-group list-group-flush bg-light ">
+								<div class="list-group list-group-flush bg-body ">
 									<div class="list-group-item d-flex justify-content-between align-items-center px-3 py-3">
 										<span class="d-flex align-items-center">
 											<i class="bi bi-calendar-plus text-muted me-2"></i>
 											Créée le:
 										</span>
-										<strong class="badge bg-light text-dark fs-6 px-3 py-2 rounded">
+										<strong class="text-dark fs-6 px-3 py-2">
 											{{ request_order.createdAt|date('d/m/Y H:i') }}
 										</strong>
 									</div>
@@ -47,7 +47,7 @@
 											Chef:
 										</span>
 										<div>
-											<a href="{{ path('app_pastry_chef_show', {'id': request_order.pastryChef.id}) }}" class="badge bg-primary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+											<a href="{{ path('app_pastry_chef_show', {'id': request_order.pastryChef.id}) }}" class="badge btn-action text-white text-decoration-none fs-6 px-3 py-2 rounded">
 												{{ request_order.pastryChef.pseudo }}
 												<i class="bi bi-arrow-up-right ms-1 small"></i>
 											</a>
@@ -59,7 +59,7 @@
 											Client:
 										</span>
 										<div>
-											<a href="{{ path('app_client_show', {'id': request_order.client.id}) }}" class="badge bg-secondary text-white text-decoration-none fs-6 px-3 py-2 rounded">
+											<a href="{{ path('app_client_show', {'id': request_order.client.id}) }}" class="badge btn-action text-white text-decoration-none fs-6 px-3 py-2 rounded">
 												{{ request_order.client.pseudo }}
 												<i class="bi bi-arrow-up-right ms-1 small"></i>
 											</a>
@@ -93,31 +93,29 @@
 				</div>
 
 				<!-- Actions -->
-				<div class="card bg-light">
-					<div class="card-body">
-						<div class="d-grid gap-2">
-							{% if is_granted('ROLE_CHEF') %}
-								<!-- Actions pour le CHEF -->
-								{% if is_granted('REQUEST_ORDER_EDIT',request_order) %}
-									<a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}" class="btn btn-outline-primary btn-sm">
-										<i class="bi bi-pencil me-1"></i>Modifier la commande
-									</a>
-								{% endif %}
-								<a href="{{ path('app_view_pastry_chef_requests', {'id': request_order.pastryChef.id}) }}" class="btn btn-outline-dark">
-									<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
+				<div class="bg-body">
+					<div class="d-grid gap-2 mb-4">
+						{% if is_granted('ROLE_CHEF') %}
+							<!-- Actions pour le CHEF -->
+							{% if is_granted('REQUEST_ORDER_EDIT',request_order) %}
+								<a href="{{ path('app_request_order_edit', {'id': request_order.id}) }}" class="btn-edit btn-sm">
+									<i class="bi bi-pencil me-1"></i>Modifier la commande
 								</a>
-							{% elseif is_granted('ROLE_CLIENT') %}
-								<!-- Actions pour le CLIENT -->
-								<a href="{{ path('app_view_client_requests', {'id': request_order.client.id}) }}" class="btn btn-outline-dark">
-									<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
-								</a>
-							{% else %}
-								<!-- Fallback ADMIN -->
-								<button onclick="history.back()" class="btn btn-outline-dark">
-									<i class="bi bi-arrow-left me-1"></i>Retour
-								</button>
 							{% endif %}
-						</div>
+							<a href="{{ path('app_view_pastry_chef_requests', {'id': request_order.pastryChef.id}) }}" class="btn-cancel">
+								<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
+							</a>
+						{% elseif is_granted('ROLE_CLIENT') %}
+							<!-- Actions pour le CLIENT -->
+							<a href="{{ path('app_view_client_requests', {'id': request_order.client.id}) }}" class="btn-cancel">
+								<i class="bi bi-arrow-left me-1"></i>Retour à mes commandes
+							</a>
+						{% else %}
+							<!-- Fallback ADMIN -->
+							<button onclick="history.back()" class="btn-cancel">
+								<i class="bi bi-arrow-left me-1"></i>Retour
+							</button>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -127,14 +125,14 @@
 				<div class="card bg-light h-100">
 					<div class="card-header d-flex justify-content-between align-items-center">
 						<h5 class="mb-0">Messagerie</h5>
-						<span class="badge bg-primary">{{ messages|length }}
+						<span class="badge bg-warning">{{ messages|length }}
 							messages</span>
 					</div>
 
 					<div
-						class="card-body d-flex flex-column">
+						class="card-body d-flex flex-column p-0">
 						<!-- Zone des messages -->
-						<div class="flex-grow-1 mb-4" style="max-height: 500px; overflow-y: auto;">
+						<div class="flex-grow-1 p-4" style="max-height: 500px; overflow-y: auto; background-color: #f8f9fa;">
 							{% if messages is empty %}
 								<div class="text-center text-muted py-5">
 									<i class="bi bi-chat-dots display-4 d-block mb-2"></i>
@@ -145,7 +143,7 @@
 								<div class="messages-container">
 									{% for message in messages %}
 										<div class="message-item mb-3 {% if message.sender == app.user.id %}message-sent{% else %}message-received{% endif %}">
-											<div class="message-bubble {% if message.sender == app.user.id %}bg-primary text-white{% else %}bg-light{% endif %} p-3 rounded-3">
+											<div class="message-bubble {% if message.sender == app.user.id %}bg-sky-blue text-white{% else %}bg-pink text-dark{% endif %} p-3 rounded-3">
 												<div class="message-content">
 													{{ message.contentMessage }}
 												</div>
@@ -160,27 +158,37 @@
 								</div>
 							{% endif %}
 						</div>
-
-						<!-- Formulaire d'envoi -->
-						<div class="message-form">
-							{{ form_start(form) }}
-							<div class="input-group">
-								{{ form_widget(form.contentMessage, {
-                                    'attr': {
-                                        'class': 'form-control',
-                                        'placeholder': 'Tapez votre message...',
-                                        'rows': 1
-                                    }
-                                }) }}
-								{{ form_widget(form.sender, {'attr': {'hidden': true}}) }}
-								{{ form_widget(form.requestOrder, {'attr': {'hidden': true}}) }}
-								{{ form_row(form._token) }}
-								<button type="submit" class="btn btn-primary">
-									<i class="bi bi-send"></i>
-								</button>
+						{% if request_order.status not in ['Terminé', 'Annulé'] %}
+							<!-- Formulaire d'envoi -->
+							<div class="message-form p-3 border-top">
+								{{ form_start(form) }}
+								<div class="input-group">
+									{{ form_widget(form.contentMessage, {'attr': {'class': 'form-control','placeholder': 'Tapez votre message...','rows': 1}}) }}
+									{{ form_widget(form.sender, {'attr': {'hidden': true}}) }}
+									{{ form_widget(form.requestOrder, {'attr': {'hidden': true}}) }}
+									{{ form_row(form._token) }}
+									<button type="submit" class="btn-action">
+										<i class="bi bi-send"></i>
+									</button>
+								</div>
+								{{ form_end(form, {render_rest: false}) }}
 							</div>
-							{{ form_end(form, {render_rest: false}) }}
-						</div>
+						{% else %}
+							<!-- Message de discussion terminée -->
+							<div class="message-form p-4 border-top bg-light">
+								<div class="text-center text-muted">
+									<i class="bi bi-chat-square-text h4 d-block mb-2"></i>
+									<p class="mb-1 fw-semibold">Discussion terminée</p>
+									<p class="small mb-0">
+										{% if request_order.status == 'Terminé' %}
+											Cette commande est terminée. La messagerie n'est plus disponible.
+										{% else %}
+											Cette commande est annulée. La messagerie n'est plus disponible.
+										{% endif %}
+									</p>
+								</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -190,7 +198,7 @@
 
 	<style>
 		.messages-container {
-			padding: 1rem;
+			padding: 0.5rem;
 		}
 
 		.message-item {
@@ -220,7 +228,20 @@
 
 		.message-form {
 			border-top: 1px solid #dee2e6;
-			padding-top: 1rem;
+		}
+
+		.bg-sky-blue {
+			background-color: #87CEEB !important;
+			border: 1px solid #6CB4D9;
+		}
+
+		.bg-pink {
+			background-color: #FFB6C1 !important;
+			border: 1px solid #FF91A4;
+		}
+
+		.bg-pink.text-dark {
+			color: #333333 !important;
 		}
 	</style>
 {% endblock %}

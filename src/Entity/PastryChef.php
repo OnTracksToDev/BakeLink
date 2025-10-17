@@ -245,4 +245,12 @@ class PastryChef extends User
 
         return $this;
     }
+    public function getTotalPastryComments(): int
+    {
+        $total = 0;
+        foreach ($this->pastries as $pastry) {
+            $total += $pastry->getCommentPastries()->count();
+        }
+        return $total;
+    }
 }

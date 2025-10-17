@@ -25,11 +25,9 @@
 					</div>
 				{% else %}
 					<!-- Compteur de commentaires -->
-					<div class="card mb-4 bg-light">
-						<div class="card-body text-center">
-							<h4 class="mb-0">Vous avez rédigé
+					<div class="text-center mb-4">
+							<h4 class="mb-0 text-dark">Vous avez rédigé
 								{{ comments|length > 1 ? comments|length ~ ' Commentaires' : comments|length ~ ' Commentaire' }}</h4>
-						</div>
 					</div>
 
 					<!-- Liste des commentaires -->
@@ -43,7 +41,7 @@
 										<p class="card-text small text-muted mb-3">Date :
 											{{ comment.createdAt|date('d/m/Y H:i') }}</p>
 										<div class="d-flex justify-content-center">
-											<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn btn-outline-dark btn-sm">
+											<a href="{{ path('app_comment_pastry_edit', {'id': comment.id}) }}" class="btn-edit btn-sm">
 												<span class="d-none d-md-inline">
 													<i class="bi bi-pencil"></i>
 													Modifier
@@ -55,7 +53,7 @@
 											<form action="{{ path('app_comment_pastry_delete', {'id': comment.id}) }}" method="POST" class="d-inline ms-2">
 												<input type="hidden" name="_method" value="DELETE">
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-												<button type="submit" class="btn btn-outline-dark btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+												<button type="submit" class="btn-delete btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
 													<span class="d-none d-md-inline">
 														<i class="bi bi-trash3"></i>
 														Supprimer
@@ -78,7 +76,7 @@
 		<!-- BOUTON RETOUR -->
 		<div class="row mt-4">
 			<div class="col text-center">
-				<a href="{{ path('app_client_show', {'id': client.id}) }}" class="btn btn-outline-dark">
+				<a href="{{ path('app_client_show', {'id': client.id}) }}" class="btn-cancel">
 					Retour au Profil de
 					{{ client.pseudo }}
 				</a>

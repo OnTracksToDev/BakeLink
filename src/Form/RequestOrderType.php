@@ -5,10 +5,11 @@ namespace App\Form;
 use App\Entity\Client;
 use App\Entity\PastryChef;
 use App\Entity\RequestOrder;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class RequestOrderType extends AbstractType
 {
@@ -16,8 +17,19 @@ class RequestOrderType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('status')
-            ->add('eventDate', null, [
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'En attente' => 'En attente',
+                    'En cours' => 'En cours',
+                    'Terminé' => 'Terminé',
+                    'Annulé' => 'Annulé',
+                ],
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'label' => 'Statut',
+                'data' => 'En attente' // Valeur par défaut
+            ])->add('eventDate', null, [
                 'widget' => 'single_text',
             ])
             ->add('createdAt', null, [

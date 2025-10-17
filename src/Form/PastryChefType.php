@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class PastryChefType extends AbstractType
@@ -90,12 +91,28 @@ class PastryChefType extends AbstractType
                     ])
                 ]
             ])
-
             ->add('isVerified')
             ->add('experience')
             ->add('price')
-            ->add('speciality')
-            ->add('websiteLink');
+            ->add('speciality', ChoiceType::class, [
+                'choices' => [
+                    'Gâteaux de célébration' => 'Gâteaux de célébration',
+                    'Mini-pâtisseries' => 'Mini-pâtisseries',
+                    'Chocolaterie' => 'Chocolaterie',
+                ],
+                'multiple' => false,
+                'expanded' => true, 
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez sélectionner une spécialité.']),
+                ],
+                'attr' => [
+                    'class' => 'form-check-input', 
+                ],
+                'label_attr' => [
+                    'class' => 'form-check-label', 
+                ],
+                'help' => 'Sélectionnez 1 spécialité',
+            ])->add('websiteLink');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
